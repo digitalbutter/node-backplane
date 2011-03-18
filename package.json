@@ -1,0 +1,30 @@
+{
+  "name": "backplane",
+  "description": "Backplane module for node",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/digitalbutter/node-backplane.git"
+  },
+  "author": "Ed Bosher <ed@tikibooth.com>",
+  "contributors":[ "Ed Bosher <ed@tikibooth.com>"
+                , "Emmanuel Prochasson <emmanuel@tikibooth.com>"
+                    ]
+
+  "directories": {
+    "lib": "."
+  },
+  "scripts": {
+    "test": "node specs.js"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "modules": {
+    "package.json": "package.json"
+  },
+  "files": [
+    ""
+  ],
+  "main": "./index"
+}
