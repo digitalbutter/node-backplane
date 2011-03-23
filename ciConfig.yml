@@ -27,5 +27,5 @@ page_publish:
 doc:
   output_dir: tmp/output/api
   parser_out_dir: tmp/parser
-  source_dir: test/source
+  source_dir: lib/
   template_dir: ~/buildTools/yuidoc-dana/
