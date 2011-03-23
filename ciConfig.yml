@@ -1,0 +1,31 @@
+project:
+  title: node-backplane
+  version: 0.0.0
+  copyright: Digital Butter Limited
+  project_url: http://digitalbutter.github.com/node-backplane/
+  source_url: https://github.com/digitalbutter/node-backplane/
+  git_url: git@github.com:digitalbutter/node-backplane.git
+  api_url: http://digitalbutter.github.com/node-backplane/api/index.html
+  author:
+      name: Ed Bosher
+      gh_account: https://github.com/edbo
+  contributors:
+    - name: Emmanuel Prochasson
+      gh_account: https://github.com/eprochasson
+npm:
+  version: 0.0.0
+  name: backplane
+page:
+  title: digitalbutter/node-backplane @ Github
+  github_account: digitalbutter
+  output_dir: tmp/output/
+  repo_name: digtalbutter/node-backplane
+  content: README.markdown
+  google_analytics_code: UA-16228137-11
+page_publish:
+  source_dir: tmp/output
+doc:
+  output_dir: tmp/output/api
+  parser_out_dir: tmp/parser
+  source_dir: test/source
+  template_dir: ~/buildTools/yuidoc-dana/
