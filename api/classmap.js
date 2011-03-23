@@ -1,4 +1,4 @@
-YAHOO.env.classMap = {};
+YAHOO.env.classMap = {"TBind": "utils"};
 
 YAHOO.env.resolveClass = function(className) {
     var a=className.split('.'), ns=YAHOO.env.classMap;

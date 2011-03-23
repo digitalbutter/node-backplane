@@ -12,8 +12,8 @@
   <title>
     API: utils
     
-      &rarr; TBind class
     
+      &rarr; backplaneMessages.js (file)
     
   </title>
 
@@ -77,8 +77,8 @@
         <a href="./index.html" title="node-backplane">node-backplane</a>
           &rarr; module <a href="./module_utils.html" title="utils">utils</a>
           
-            &rarr; class TBind
           
+            &rarr; file backplaneMessages.js
           
       </div>
     </div> <!--! end of #sub-hd -->
@@ -103,7 +103,7 @@
             <div id="classList" class="module">
               <h4>Classes</h4>
               <ul>
-                  <li  class="selected" >
+                  <li >
                     <a href="TBind.html">TBind</a>
                   </li>
               </ul>
@@ -115,7 +115,7 @@
                   <li >
                     <a href="backplane.js.html">backplane.js</a>
                   </li>
-                  <li >
+                  <li  class="selected" >
                     <a href="backplaneMessages.js.html">backplaneMessages.js</a>
                   </li>
                   <li >
@@ -131,14 +131,6 @@
             </div>
 
 
-            <div id="methodsList" class="module">
-              <h4>Methods</h4>
-              <ul>
-                  <li class=" ">
-                    <a href="#method_bind">bind</a>
-                  </li>
-              </ul>
-            </div>
 
 
 
@@ -150,113 +142,52 @@
     <div id="content" class="grid_12">
       
 
-      
-        <h2>
-          
 
-          
+        <!--! source code view -->
+        <div id="srcout">
+          <h2>
+            file <strong>backplaneMessages.js</strong>
+          </h2>
 
-          
+          <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Message</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="p">};</span>
 
-          class <strong>TBind</strong>
-          
-        </h2>
+<span class="kd">var</span> <span class="nx">LoginMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;identity/login&#39;</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">source</span> <span class="o">=</span> <span class="nx">context</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="o">:</span> <span class="nx">context</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-        <!-- class tree goes here -->
+<span class="nx">LoginMessage</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Message</span><span class="p">();</span>
+<span class="nx">LoginMessage</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadFromRpx</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rpxPayload</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">rpxPayload</span><span class="p">.</span><span class="nx">profile</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">payload</span><span class="p">.</span><span class="nx">entry</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">accounts</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nx">identityUrl</span><span class="o">:</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">identifier</span><span class="p">,</span>
+                <span class="nx">username</span><span class="o">:</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">preferredUsername</span><span class="p">,</span>
+                <span class="nx">emails</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">value</span><span class="o">:</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">verifiedEmail</span><span class="p">,</span>
+                    <span class="nx">primary</span><span class="o">:</span> <span class="kc">true</span>
+                <span class="p">}],</span>
+                <span class="nx">photos</span><span class="o">:</span> <span class="p">[{</span>
+                    <span class="nx">value</span><span class="o">:</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">photo</span><span class="p">,</span>
+                    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;avatar&quot;</span>
+                <span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nx">displayName</span><span class="o">:</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
+<span class="nx">exports</span><span class="p">.</span><span class="nx">Message</span> <span class="o">=</span> <span class="nx">Message</span><span class="p">;</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">LoginMessage</span> <span class="o">=</span> <span class="nx">LoginMessage</span><span class="p">;</span>
+</pre></div>
 
-
-        <div class="summary description">
-          A Trait class for holding helper functions for enforcing scope
         </div>
-        
-
-
-
-        <div class="clear"></div>
-
-
-
-
-
-
-          <div class="section methods" resource="#methods">
-              <h3>Methods</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>
-                      Methods
-                    </th>
-                    <th>
-                      Returns
-                    </th>
-                    <th>
-                      Description
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                    <tr class=" " resource="#method_bind">
-
-                      <td class="names">
-                        <code>
-                          <a name="method_bind">bind</a>(
-                          The
-                          )
-                        </code>
-                      </td>
-
-                      <td class="returns">
-                        <code>
-                          
-                        </code>
-
-                        
-                        
-                        
-                      </td>
-
-                      <td class="description">
-                        <a href="#top" class="top" title="Jump back to the top">↑</a>
-
-
-                        A bind function which binds the scope of the funciton to be called to the local scope of the object.
-
-                          <p>Parameters:</p>
-                          <ul>
-                              <li>
-                                <code>
-                                  The
-                                  &lt;function&gt;
-                                </code>
-                                 function to bind the local scope to
-                              </li>
-                          <ul>
-
-
-                          <p>Returns:</p>
-                          <ul>
-                            <li>
-                              The function passed in bound to the local scope
-                            </li>
-                          </ul>
-                      </td>
-
-                    </tr>
-
-                </tbody>
-              </table>
-
-
-
-          </div>
-
-
-
-
-
 
     </div>
 
