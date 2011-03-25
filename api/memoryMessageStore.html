@@ -322,7 +322,7 @@
                       <td class="names">
                         <code>
                           <a name="method_delBus">delBus</a>(
-                          :
+                          bus
                           )
                         </code>
                       </td>
@@ -347,10 +347,10 @@
                           <ul>
                               <li>
                                 <code>
-                                  :
+                                  bus
                                   &lt;string&gt;
                                 </code>
-                                 bus bus to be deleted
+                                 bus to be deleted
 delete the bus
 the bus MUST exist
                               </li>
@@ -414,7 +414,7 @@ delete the channel.
                       <td class="names">
                         <code>
                           <a name="method_getBusMessages">getBusMessages</a>(
-                          bus, options, :
+                          bus, options, callback
                           )
                         </code>
                       </td>
@@ -453,10 +453,10 @@ delete the channel.
                               </li>
                               <li>
                                 <code>
-                                  :
+                                  callback
                                   &lt;function&gt;
                                 </code>
-                                 callback callback method. Will be called as callback(message,error)
+                                 callback method. Will be called as callback(message,error)
                               </li>
                           <ul>
 

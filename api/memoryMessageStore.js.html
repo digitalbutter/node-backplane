@@ -213,6 +213,7 @@
     <span class="cm">/**</span>
 <span class="cm">     * @class Store</span>
 <span class="cm">     * @private</span>
+<span class="cm">     * @constructor</span>
 <span class="cm">     * Implements the Store. Deals with Bus and Channel construction/checking</span>
 <span class="cm">     * Retrieve information from Bus/Store</span>
 <span class="cm">     */</span>
@@ -402,7 +403,7 @@
 <span class="cm">        * @method getBusMessages</span>
 <span class="cm">        * @param {string} bus bus from which to retrive messages</span>
 <span class="cm">        * @param {Object} options allows to pass a &quot;since&quot; parameter, indicating the id of the last message retrieved before. Method will return new messages published since &quot;since&quot; (unless &quot;since&quot; is too old, in which case it will retrieve all messages in the queue).</span>
-<span class="cm">        * @param {function}: callback callback method. Will be called as callback(message,error)</span>
+<span class="cm">        * @param {function} callback callback method. Will be called as callback(message,error)</span>
 <span class="cm">        */</span>
        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to read an invalid bus&quot;</span><span class="p">});</span>
@@ -440,7 +441,7 @@
    <span class="nx">my</span><span class="p">.</span><span class="nx">delBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
    <span class="cm">/**</span>
 <span class="cm">    * @method delBus</span>
-<span class="cm">    * @param {string}: bus bus to be deleted</span>
+<span class="cm">    * @param {string} bus bus to be deleted</span>
 <span class="cm">    * delete the bus</span>
 <span class="cm">    * the bus MUST exist</span>
 <span class="cm">    */</span>
