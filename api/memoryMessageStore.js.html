@@ -105,6 +105,9 @@
               <h4>Classes</h4>
               <ul>
                   <li >
+                    <a href="memoryMessageStore.html">memoryMessageStore</a>
+                  </li>
+                  <li >
                     <a href="TBind.html">TBind</a>
                   </li>
               </ul>
@@ -150,7 +153,285 @@
             file <strong>memoryMessageStore.js</strong>
           </h2>
 
-          <div class="highlight"><pre>
+          <div class="highlight"><pre><span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./../utils.js&quot;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">Channel</span><span class="p">(</span><span class="nx">channel_name</span><span class="p">)</span>  <span class="p">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @class Channel</span>
+<span class="cm">     * @private</span>
+<span class="cm">     * Implements a channel, take care of the queue of messages</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">maxsize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">channel_name</span> <span class="o">=</span> <span class="nx">channel_name</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">len</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">pushMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">content</span><span class="p">,</span><span class="nx">count</span><span class="p">){</span>
+        <span class="c1">// Remove trailing, old elements (store only the latest messages)</span>
+        <span class="c1">// count is maintained by the Store object, and allows to identify message with a unique, increasing id.</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">len</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxsize</span><span class="p">){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+            <span class="nx">message</span><span class="o">:</span><span class="nx">content</span> <span class="c1">// The backplane message</span>
+            <span class="p">,</span> <span class="nx">channel_name</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">channel_name</span> 
+            <span class="p">,</span> <span class="nx">id</span><span class="o">:</span><span class="nx">count</span><span class="p">});</span> <span class="c1">// Unique ID for the bus, for reference.</span>
+    <span class="p">};</span>
+
+
+    <span class="c1">// update the maxsize for this channel and remove potential extra-messages</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">new_maxsize</span> <span class="o">=</span>  <span class="kd">function</span><span class="p">(</span><span class="nx">size</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">maxsize</span> <span class="o">=</span> <span class="nx">size</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">len</span><span class="p">()</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxsize</span><span class="p">){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">getChannelMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">options</span><span class="o">&amp;&amp;</span><span class="nx">options</span><span class="p">.</span><span class="nx">since</span><span class="p">){</span>
+            <span class="c1">// Return the content of the whole channel until the &quot;since&quot; message</span>
+            <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span> <span class="c1">// output</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">){</span>
+                <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">id</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">since</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">res</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// Return the entire channel</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kd">function</span> <span class="nx">Store</span><span class="p">()</span>  <span class="p">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @class Store</span>
+<span class="cm">     * @private</span>
+<span class="cm">     * Implements the Store. Deals with Bus and Channel construction/checking</span>
+<span class="cm">     * Retrieve information from Bus/Store</span>
+<span class="cm">     */</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">maxsize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// default number of messages stored for all NEW channel</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// Add a new bus to the store</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">addBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;Adding existing bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span> <span class="o">:</span> <span class="s2">&quot;Attempt to create a new bus, but it exists already (&quot;</span> <span class="o">+</span> <span class="nx">bus</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Add a new channel to an existing bus</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">addChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]){</span>
+            <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;Bus not valid exception&quot;</span><span class="p">,</span> <span class="nx">message</span> <span class="o">:</span> <span class="s2">&quot;Attempt to create a new channel on a non-existing bus (&quot;</span><span class="o">+</span><span class="nx">bus</span><span class="o">+</span><span class="s2">&quot;)&quot;</span><span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">]){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Channel</span><span class="p">(</span><span class="nx">channel</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span> <span class="o">:</span> <span class="s2">&quot;Adding existing channel exception&quot;</span><span class="p">,</span> <span class="nx">message</span> <span class="o">:</span> <span class="s2">&quot;Attempt to create a new bus, but it exists already (&quot;</span><span class="o">+</span><span class="nx">channel</span><span class="o">+</span><span class="s2">&quot;)&quot;</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">getChannelMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">options</span><span class="p">){</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">getBusMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">options</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">since</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">channel</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]){</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">content</span><span class="p">){</span>
+                    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">content</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">id</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">since</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="nx">res</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">channel</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]){</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">index</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">content</span><span class="p">){</span>
+                    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">content</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+        <span class="p">}</span>
+        
+    <span class="p">}</span>
+
+    <span class="c1">// Append a message to a given channel. Requires valid/existing bus/channel</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">pushMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">].</span><span class="nx">pushMessage</span><span class="p">(</span><span class="nx">content</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">isValidChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+        <span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!!</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">])</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">isValidBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
+        <span class="k">return</span> <span class="o">!!</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]);</span>
+    <span class="p">};</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">delChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isValidChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)){</span>
+            <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s2">&quot;Invalid channel exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to delete a invalid channel&quot;</span><span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">][</span><span class="nx">channel</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    
+    <span class="k">this</span><span class="p">.</span><span class="nx">delBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isValidBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
+            <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to delete a invalid bus&quot;</span><span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">lsBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// List all the bus stored</span>
+        <span class="nx">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">){</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">res</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">lsChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
+        <span class="c1">// list all channel for a bus</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isValid</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
+            <span class="nx">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">content</span><span class="p">[</span><span class="nx">bus</span><span class="p">]){</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">res</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to access an invalid bus&quot;</span><span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="cm">/**</span>
+<span class="cm">     * The memoryMessageStore class deals with:</span>
+<span class="cm">     * - storing the message in memory</span>
+<span class="cm">     * - validating messages</span>
+<span class="cm">     * - bus and channel management (creation, access)</span>
+<span class="cm">     * - providing messages (for bus and/or channel)</span>
+<span class="cm">     * - cleaning outdated messages</span>
+<span class="cm">     * @class memoryMessageStore</span>
+<span class="cm">     * @require utils.js</span>
+<span class="cm">     */</span>
+
+   <span class="kd">var</span> <span class="nx">my</span> <span class="o">=</span> <span class="p">{};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Store</span><span class="p">;</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method save</span>
+<span class="cm">        * @param {bus,channel,content}</span>
+<span class="cm">        * @return null</span>
+<span class="cm">        * bus : must be a valid, existing bus</span>
+<span class="cm">        * channel : if it does not exist, it will be created before pushing the message (MUST be base64 encoded)</span>
+<span class="cm">        * content : a valid backplane message</span>
+<span class="cm">        */</span>
+       <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">content</span><span class="p">)){</span>
+         <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Content not valid exception&quot;</span><span class="p">,</span><span class="nx">message</span><span class="o">:</span><span class="s2">&quot;Attempt to push an invalid message to the channel &quot;</span><span class="o">+</span><span class="nx">bus</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nx">channel</span><span class="p">}</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+           <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
+               <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Can&#39;t push to non-existing bus&quot;</span><span class="p">}</span>
+           <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)){</span>
+                <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">pushMessage</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">)</span>
+               <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                   <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">addChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">);</span>
+                   <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">pushMessage</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">)</span>
+               <span class="p">}</span>
+       <span class="p">}</span>
+   <span class="p">};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">getChannelMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">options</span><span class="p">,</span><span class="nx">callback</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method getChannelMessages</span>
+<span class="cm">        * @param {bus,channel,options,callback}</span>
+<span class="cm">        * Get messages from a given bus/channel</span>
+<span class="cm">        * options : to specify a &quot;since&quot; parameter (ONLY supported parameter for now)</span>
+<span class="cm">        * callback : function(message,error). message: retrieved message from channel, error: potential errors.</span>
+<span class="cm">        */</span>
+       <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)){</span>
+           <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus/channel exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to read an invalid bus/channel&quot;</span><span class="p">});</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+           <span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+           <span class="nx">callback</span><span class="p">(</span><span class="nx">messages</span><span class="p">,</span><span class="kc">null</span><span class="p">)</span>
+       <span class="p">}</span>
+   <span class="p">};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">getBusMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">options</span><span class="p">,</span><span class="nx">callback</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method getBusMessages</span>
+<span class="cm">        * @param {bus,options,callback}</span>
+<span class="cm">        * Get messages from all the channel of a given bus</span>
+<span class="cm">        * options : to specify a &quot;since&quot; parameter (ONLY supported parameter for now)</span>
+<span class="cm">        * callback : function(message,error). message: retrieved message from channel, error: potential errors.</span>
+<span class="cm">        */</span>
+       <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
+           <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to read an invalid bus&quot;</span><span class="p">});</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+           <span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">options</span><span class="p">);</span>
+           <span class="nx">callback</span><span class="p">(</span><span class="nx">messages</span><span class="p">,</span><span class="kc">null</span><span class="p">);</span>
+       <span class="p">}</span>
+   <span class="p">};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method validate</span>
+<span class="cm">        * @param {message}</span>
+<span class="cm">        * check that message is a proper Backplane message with source, type and payload</span>
+<span class="cm">        */</span>
+       <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">source</span> <span class="o">||</span> <span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">payload</span> <span class="o">||</span> <span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">type</span><span class="p">){</span>
+           <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid Message Exception&quot;</span><span class="p">,</span><span class="nx">message</span><span class="o">:</span><span class="s2">&quot;Specify source, payload and type&quot;</span><span class="p">}</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span>  <span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">isValidURL</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">source</span><span class="p">))</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="kc">true</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="k">throw</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid Message Exception&quot;</span><span class="p">,</span><span class="nx">message</span><span class="o">:</span><span class="s2">&quot;source must be a valid URL&quot;</span><span class="p">}</span> <span class="p">}</span>
+       <span class="p">}</span>
+   <span class="p">};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">delChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @method delChannel</span>
+<span class="cm">     * @param {bus, channel}</span>
+<span class="cm">     * delete the channel</span>
+<span class="cm">     * the channel MUST exist</span>
+<span class="cm">     */</span>
+     <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">delChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)</span>
+   <span class="p">};</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">delBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
+   <span class="cm">/**</span>
+<span class="cm">    * @method delBus</span>
+<span class="cm">    * @param {bus}</span>
+<span class="cm">    * delete the bus</span>
+<span class="cm">    * the bus MUST exist</span>
+<span class="cm">    */</span>
+       <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">delBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)</span>
+    <span class="p">};</span>
+    
+   <span class="k">return</span> <span class="nx">my</span><span class="p">;</span>
+<span class="p">})();</span>
 </pre></div>
 
         </div>

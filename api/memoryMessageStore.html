@@ -1,0 +1,517 @@
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+  <title>
+    API: utils
+    
+      &rarr; memoryMessageStore class
+    
+    
+  </title>
+
+  <link rel="stylesheet" type="text/css" href="css/960fluid.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.4.custom.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/navigation.css">
+  <link rel="stylesheet" type="text/css" href="css/content.css">
+  <link rel="stylesheet" type="text/css" href="css/codeview.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+  
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+  <div id="container" class="container_16">
+    <a name="top"></a>
+
+    <!-- HEADER -->
+    <header>
+      <div id="hd" class="grid_10">
+        <h1>
+          <a href="http://digitalbutter.github.com/node-backplane/" title="node-backplane">node-backplane</a> v0.0.0
+        </h1>
+      </div> <!--! end of #hd -->
+    </header>
+
+    <div id="filters" class="grid_6">
+      <form action="#" method="get" id="show-toggles">
+        <fieldset>
+          <legend>Display Filters</legend>
+          <span class="classopts">
+            <input type="checkbox" name="show_private" id="show_private">
+            <label for="show_private">Show private</label>
+          </span>
+          <span class="classopts">
+            <input type="checkbox" name="show_protected" id="show_protected">
+            <label for="show_protected">Show protected</label>
+          </span>
+          <span class="classopts">
+            <input type="checkbox" name="show_deprecated" id="show_deprecated">
+            <label for="show_deprecated">Show deprecated</label>
+          </span>
+        </fieldset>
+      </form>
+
+    </div> <!--! end of #hd -->
+
+
+    <!-- SUB-HEADER w/ BREADCRUMBS -->
+
+    <div id="sub-hd" class="grid_16">
+      <div id="breadcrumbs">
+        <form id="search-form" method="get" action="#">
+          <label for="search">Search:</label>
+          <input type="text" id="search" title="Find documentation">
+        </form>
+
+        <a href="./index.html" title="node-backplane">node-backplane</a>
+          &rarr; module <a href="./module_utils.html" title="utils">utils</a>
+          
+            &rarr; class memoryMessageStore
+          
+          
+      </div>
+    </div> <!--! end of #sub-hd -->
+    
+    <div class="clear"></div>
+    
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav>
+      <div id="navigation" class="grid_4">
+        <div>
+
+            <div id="moduleList" class="module">
+              <h4>Modules</h4>
+              <ul>
+                  <li  class="selected" >
+                    <a href="module_utils.html">utils</a>
+                  </li>
+              </ul>
+            </div>
+
+            <div id="classList" class="module">
+              <h4>Classes</h4>
+              <ul>
+                  <li  class="selected" >
+                    <a href="memoryMessageStore.html">memoryMessageStore</a>
+                  </li>
+                  <li >
+                    <a href="TBind.html">TBind</a>
+                  </li>
+              </ul>
+            </div>
+
+            <div id="fileList" class="module">
+              <h4>Files</h4>
+              <ul>
+                  <li >
+                    <a href="backplane.js.html">backplane.js</a>
+                  </li>
+                  <li >
+                    <a href="backplaneMessages.js.html">backplaneMessages.js</a>
+                  </li>
+                  <li >
+                    <a href="BackplanePoller.js.html">BackplanePoller.js</a>
+                  </li>
+                  <li >
+                    <a href="memoryMessageStore.js.html">memoryMessageStore.js</a>
+                  </li>
+                  <li >
+                    <a href="utils.js.html">utils.js</a>
+                  </li>
+              </ul>
+            </div>
+
+
+            <div id="methodsList" class="module">
+              <h4>Methods</h4>
+              <ul>
+                  <li class=" ">
+                    <a href="#method_delBus">delBus</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_delChannel">delChannel</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_getBusMessages">getBusMessages</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_getChannelMessages">getChannelMessages</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_save">save</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_validate">validate</a>
+                  </li>
+              </ul>
+            </div>
+
+
+
+        </div>
+      </div>  <!-- end of #navigation -->
+    </nav>
+
+
+    <div id="content" class="grid_12">
+      
+
+      
+        <h2>
+          
+
+          
+
+          
+
+          class <strong>memoryMessageStore</strong>
+          
+        </h2>
+
+        <!-- class tree goes here -->
+
+
+
+        <div class="summary description">
+          The memoryMessageStore class deals with:
+- storing the message in memory
+- validating messages
+- bus and channel management (creation, access)
+- providing messages (for bus and/or channel)
+- cleaning outdated messages
+        </div>
+        
+
+
+
+        <div class="clear"></div>
+
+
+
+
+
+
+          <div class="section methods" resource="#methods">
+              <h3>Methods</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      Methods
+                    </th>
+                    <th>
+                      Returns
+                    </th>
+                    <th>
+                      Description
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                    <tr class=" " resource="#method_delBus">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_delBus">delBus</a>(
+                          delete
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  delete
+                                  &lt;bus&gt;
+                                </code>
+                                 the bus
+the bus MUST exist
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_delChannel">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_delChannel">delChannel</a>(
+                          delete
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  delete
+                                  &lt;bus, channel&gt;
+                                </code>
+                                 the channel
+the channel MUST exist
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_getBusMessages">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_getBusMessages">getBusMessages</a>(
+                          Get
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  Get
+                                  &lt;bus,options,callback&gt;
+                                </code>
+                                 messages from all the channel of a given bus
+options : to specify a "since" parameter (ONLY supported parameter for now)
+callback : function(message,error). message: retrieved message from channel, error: potential errors.
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_getChannelMessages">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_getChannelMessages">getChannelMessages</a>(
+                          Get
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  Get
+                                  &lt;bus,channel,options,callback&gt;
+                                </code>
+                                 messages from a given bus/channel
+options : to specify a "since" parameter (ONLY supported parameter for now)
+callback : function(message,error). message: retrieved message from channel, error: potential errors.
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_save">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_save">save</a>(
+                          
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+
+
+                          <p>Returns:</p>
+                          <ul>
+                            <li>
+                              null
+bus : must be a valid, existing bus
+channel : if it does not exist, it will be created before pushing the message (MUST be base64 encoded)
+content : a valid backplane message
+                            </li>
+                          </ul>
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_validate">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_validate">validate</a>(
+                          check
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  check
+                                  &lt;message&gt;
+                                </code>
+                                 that message is a proper Backplane message with source, type and payload
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+
+                </tbody>
+              </table>
+
+
+
+          </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="clear"></div>
+
+    
+    <footer>
+      <div id="footer" class="grid_16">
+        <p>
+          Copyright &copy; 2011 Digital Butter Limited. All rights reserved.
+          &middot;
+          Docs generated using <a href="http://developer.yahoo.com/yui/yuidoc/">YUIDoc</a> sporting the <a href="http://github.com/carlo/yuidoc-theme-dana">Dana theme</a>.
+        </p>
+      </div> <!--! end of #footer -->
+    </footer>
+
+
+    <div class="clear"></div>
+
+  </div>
+
+  <!-- Javascript at the bottom for fast page loading -->
+  <script src="js/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="js/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
+  <script src="js/jquery.cookie.min.js" type="text/javascript"></script>
+  <script src="js/main.js" type="text/javascript"></script>
+  
+</body>
+</html>

@@ -105,6 +105,9 @@
               <h4>Classes</h4>
               <ul>
                   <li >
+                    <a href="memoryMessageStore.html">memoryMessageStore</a>
+                  </li>
+                  <li >
                     <a href="TBind.html">TBind</a>
                   </li>
               </ul>
@@ -153,6 +156,8 @@
           <div class="highlight"><pre><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./../utils.js&#39;</span><span class="p">);</span>
 
+<span class="kd">var</span> <span class="nx">memoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./memoryMessageStore.js&quot;</span><span class="p">)</span>
+
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
     <span class="kd">var</span> <span class="nx">my</span> <span class="o">=</span> <span class="p">{};</span>
 
@@ -165,17 +170,10 @@
         <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a base64 decoder to function.&quot;</span> <span class="p">}</span>
     <span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">save</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">){</span>
-            <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a messageStore with a save function.&quot;</span> <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="c1">//Callback function([ Messages ]){};</span>
-        <span class="p">,</span><span class="nx">getChannelMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span> <span class="nx">channel</span><span class="p">,</span><span class="nx">callback</span><span class="p">){</span>
-            <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a messageStore with a getChannelMessages function&quot;</span> <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="p">,</span><span class="nx">getBusMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
-            <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a messageStore with a getBusMessages function&quot;</span> <span class="p">}</span>
-        <span class="p">}</span>
+    <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span> <span class="o">=</span> <span class="p">{</span> 
+        <span class="nx">save</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">,</span><span class="nx">getChannelMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">}</span>
+        <span class="p">,</span><span class="nx">getBusMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="nx">my</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">){</span>
