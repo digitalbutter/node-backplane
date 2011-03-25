@@ -343,7 +343,9 @@
    <span class="nx">my</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">){</span>
        <span class="cm">/**</span>
 <span class="cm">        * @method save</span>
-<span class="cm">        * @param {bus,channel,content}</span>
+<span class="cm">        * @param {bus}: bus where the channel you want to post to lies</span>
+<span class="cm">        * @param {channel}: channel where to post the message</span>
+<span class="cm">        * @param {content}: message to post</span>
 <span class="cm">        * @return null</span>
 <span class="cm">        * bus : must be a valid, existing bus</span>
 <span class="cm">        * channel : if it does not exist, it will be created before pushing the message (MUST be base64 encoded)</span>
@@ -363,13 +365,31 @@
        <span class="p">}</span>
    <span class="p">};</span>
 
+   <span class="nx">my</span><span class="p">.</span><span class="nx">addBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method addBus</span>
+<span class="cm">        * @param {bus} bus: the bus to be created (string)</span>
+<span class="cm">        */</span>
+       <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">addBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="nx">my</span><span class="p">.</span><span class="nx">addChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+       <span class="cm">/**</span>
+<span class="cm">        * @method addChannel</span>
+<span class="cm">        * @param {bus} bus: bus on top of which to create the channel (string)</span>
+<span class="cm">        * @param {channel} channel: channel to create (string)</span>
+<span class="cm">        */</span>
+       <span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">addChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)</span>
+   <span class="p">}</span>
+
    <span class="nx">my</span><span class="p">.</span><span class="nx">getChannelMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">options</span><span class="p">,</span><span class="nx">callback</span><span class="p">){</span>
        <span class="cm">/**</span>
+<span class="cm">        * Retrieve messages from a given channel</span>
 <span class="cm">        * @method getChannelMessages</span>
-<span class="cm">        * @param {bus,channel,options,callback}</span>
-<span class="cm">        * Get messages from a given bus/channel</span>
-<span class="cm">        * options : to specify a &quot;since&quot; parameter (ONLY supported parameter for now)</span>
-<span class="cm">        * callback : function(message,error). message: retrieved message from channel, error: potential errors.</span>
+<span class="cm">        * @param {bus}: bus where the channel lies</span>
+<span class="cm">        * @param {channel}: channel to retrieve the messages from</span>
+<span class="cm">        * @param {options}: allows to pass a &quot;since&quot; parameter, indicating the id of the last message retrieved before. Method will return new messages published since &quot;since&quot; (unless &quot;since&quot; is too old, in which case it will retrieve all messages in the queue).</span>
+<span class="cm">        * @param {callback}: callback method. Will be called as callback(message,error)</span>
 <span class="cm">        */</span>
        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidChannel</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">)){</span>
            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus/channel exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to read an invalid bus/channel&quot;</span><span class="p">});</span>
@@ -381,11 +401,11 @@
 
    <span class="nx">my</span><span class="p">.</span><span class="nx">getBusMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">options</span><span class="p">,</span><span class="nx">callback</span><span class="p">){</span>
        <span class="cm">/**</span>
+<span class="cm">        * Retrieve messages from all the channel of a given bus</span>
 <span class="cm">        * @method getBusMessages</span>
-<span class="cm">        * @param {bus,options,callback}</span>
-<span class="cm">        * Get messages from all the channel of a given bus</span>
-<span class="cm">        * options : to specify a &quot;since&quot; parameter (ONLY supported parameter for now)</span>
-<span class="cm">        * callback : function(message,error). message: retrieved message from channel, error: potential errors.</span>
+<span class="cm">        * @param {bus}: bus from which to retrive messages</span>
+<span class="cm">        * @param {options}:allows to pass a &quot;since&quot; parameter, indicating the id of the last message retrieved before. Method will return new messages published since &quot;since&quot; (unless &quot;since&quot; is too old, in which case it will retrieve all messages in the queue).</span>
+<span class="cm">        * @param {callback}: callback method. Will be called as callback(message,error)</span>
 <span class="cm">        */</span>
        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">my</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">isValidBus</span><span class="p">(</span><span class="nx">bus</span><span class="p">)){</span>
            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid bus exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Attempt to read an invalid bus&quot;</span><span class="p">});</span>
@@ -398,7 +418,7 @@
    <span class="nx">my</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
        <span class="cm">/**</span>
 <span class="cm">        * @method validate</span>
-<span class="cm">        * @param {message}</span>
+<span class="cm">        * @param {message}: message to be validated</span>
 <span class="cm">        * check that message is a proper Backplane message with source, type and payload</span>
 <span class="cm">        */</span>
        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">source</span> <span class="o">||</span> <span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">payload</span> <span class="o">||</span> <span class="o">!</span><span class="nx">message</span><span class="p">.</span><span class="nx">type</span><span class="p">){</span>
@@ -413,7 +433,8 @@
    <span class="nx">my</span><span class="p">.</span><span class="nx">delChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
     <span class="cm">/**</span>
 <span class="cm">     * @method delChannel</span>
-<span class="cm">     * @param {bus, channel}</span>
+<span class="cm">     * @param {bus}: bus where the channel to be deleted lies</span>
+<span class="cm">     * @param {channel}: channel to remove</span>
 <span class="cm">     * delete the channel</span>
 <span class="cm">     * the channel MUST exist</span>
 <span class="cm">     */</span>
@@ -423,7 +444,7 @@
    <span class="nx">my</span><span class="p">.</span><span class="nx">delBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">){</span>
    <span class="cm">/**</span>
 <span class="cm">    * @method delBus</span>
-<span class="cm">    * @param {bus}</span>
+<span class="cm">    * @param {bus}: bus to be deleted</span>
 <span class="cm">    * delete the bus</span>
 <span class="cm">    * the bus MUST exist</span>
 <span class="cm">    */</span>

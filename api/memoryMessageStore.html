@@ -139,6 +139,12 @@
               <h4>Methods</h4>
               <ul>
                   <li class=" ">
+                    <a href="#method_addBus">addBus</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_addChannel">addChannel</a>
+                  </li>
+                  <li class=" ">
                     <a href="#method_delBus">delBus</a>
                   </li>
                   <li class=" ">
@@ -222,12 +228,12 @@
                 </thead>
                 <tbody>
 
-                    <tr class=" " resource="#method_delBus">
+                    <tr class=" " resource="#method_addBus">
 
                       <td class="names">
                         <code>
-                          <a name="method_delBus">delBus</a>(
-                          delete
+                          <a name="method_addBus">addBus</a>(
+                          bus:
                           )
                         </code>
                       </td>
@@ -252,10 +258,100 @@
                           <ul>
                               <li>
                                 <code>
-                                  delete
+                                  bus:
                                   &lt;bus&gt;
                                 </code>
-                                 the bus
+                                 the bus to be created (string)
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_addChannel">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_addChannel">addChannel</a>(
+                          bus:, channel:
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  bus:
+                                  &lt;bus&gt;
+                                </code>
+                                 bus on top of which to create the channel (string)
+                              </li>
+                              <li>
+                                <code>
+                                  channel:
+                                  &lt;channel&gt;
+                                </code>
+                                 channel to create (string)
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_delBus">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_delBus">delBus</a>(
+                          :
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;bus&gt;
+                                </code>
+                                 bus to be deleted
+delete the bus
 the bus MUST exist
                               </li>
                           <ul>
@@ -269,7 +365,7 @@ the bus MUST exist
                       <td class="names">
                         <code>
                           <a name="method_delChannel">delChannel</a>(
-                          delete
+                          :
                           )
                         </code>
                       </td>
@@ -294,10 +390,18 @@ the bus MUST exist
                           <ul>
                               <li>
                                 <code>
-                                  delete
-                                  &lt;bus, channel&gt;
+                                  :
+                                  &lt;bus&gt;
                                 </code>
-                                 the channel
+                                 bus where the channel to be deleted lies
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;channel&gt;
+                                </code>
+                                 channel to remove
+delete the channel
 the channel MUST exist
                               </li>
                           <ul>
@@ -311,7 +415,7 @@ the channel MUST exist
                       <td class="names">
                         <code>
                           <a name="method_getBusMessages">getBusMessages</a>(
-                          Get
+                          :, :allows, :
                           )
                         </code>
                       </td>
@@ -330,18 +434,30 @@ the channel MUST exist
                         <a href="#top" class="top" title="Jump back to the top">↑</a>
 
 
-                        
+                        Retrieve messages from all the channel of a given bus
 
                           <p>Parameters:</p>
                           <ul>
                               <li>
                                 <code>
-                                  Get
-                                  &lt;bus,options,callback&gt;
+                                  :
+                                  &lt;bus&gt;
                                 </code>
-                                 messages from all the channel of a given bus
-options : to specify a "since" parameter (ONLY supported parameter for now)
-callback : function(message,error). message: retrieved message from channel, error: potential errors.
+                                 bus from which to retrive messages
+                              </li>
+                              <li>
+                                <code>
+                                  :allows
+                                  &lt;options&gt;
+                                </code>
+                                 to pass a "since" parameter, indicating the id of the last message retrieved before. Method will return new messages published since "since" (unless "since" is too old, in which case it will retrieve all messages in the queue).
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;callback&gt;
+                                </code>
+                                 callback method. Will be called as callback(message,error)
                               </li>
                           <ul>
 
@@ -354,7 +470,7 @@ callback : function(message,error). message: retrieved message from channel, err
                       <td class="names">
                         <code>
                           <a name="method_getChannelMessages">getChannelMessages</a>(
-                          Get
+                          :
                           )
                         </code>
                       </td>
@@ -373,18 +489,37 @@ callback : function(message,error). message: retrieved message from channel, err
                         <a href="#top" class="top" title="Jump back to the top">↑</a>
 
 
-                        
+                        Retrieve messages from a given channel
 
                           <p>Parameters:</p>
                           <ul>
                               <li>
                                 <code>
-                                  Get
-                                  &lt;bus,channel,options,callback&gt;
+                                  :
+                                  &lt;bus&gt;
                                 </code>
-                                 messages from a given bus/channel
-options : to specify a "since" parameter (ONLY supported parameter for now)
-callback : function(message,error). message: retrieved message from channel, error: potential errors.
+                                 bus where the channel lies
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;channel&gt;
+                                </code>
+                                 channel to retrieve the messages from
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;options&gt;
+                                </code>
+                                 allows to pass a "since" parameter, indicating the id of the last message retrieved before. Method will return new messages published since "since" (unless "since" is too old, in which case it will retrieve all messages in the queue).
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;callback&gt;
+                                </code>
+                                 callback method. Will be called as callback(message,error)
                               </li>
                           <ul>
 
@@ -397,7 +532,7 @@ callback : function(message,error). message: retrieved message from channel, err
                       <td class="names">
                         <code>
                           <a name="method_save">save</a>(
-                          
+                          :
                           )
                         </code>
                       </td>
@@ -418,6 +553,30 @@ callback : function(message,error). message: retrieved message from channel, err
 
                         
 
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;bus&gt;
+                                </code>
+                                 bus where the channel you want to post to lies
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;channel&gt;
+                                </code>
+                                 channel where to post the message
+                              </li>
+                              <li>
+                                <code>
+                                  :
+                                  &lt;content&gt;
+                                </code>
+                                 message to post
+                              </li>
+                          <ul>
 
 
                           <p>Returns:</p>
@@ -437,7 +596,7 @@ content : a valid backplane message
                       <td class="names">
                         <code>
                           <a name="method_validate">validate</a>(
-                          check
+                          :
                           )
                         </code>
                       </td>
@@ -462,10 +621,11 @@ content : a valid backplane message
                           <ul>
                               <li>
                                 <code>
-                                  check
+                                  :
                                   &lt;message&gt;
                                 </code>
-                                 that message is a proper Backplane message with source, type and payload
+                                 message to be validated
+check that message is a proper Backplane message with source, type and payload
                               </li>
                           <ul>
 
