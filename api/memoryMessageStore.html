@@ -233,7 +233,7 @@
                       <td class="names">
                         <code>
                           <a name="method_addBus">addBus</a>(
-                          bus:
+                          bus
                           )
                         </code>
                       </td>
@@ -258,10 +258,10 @@
                           <ul>
                               <li>
                                 <code>
-                                  bus:
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
-                                 the bus to be created (string)
+                                 the bus to be created
                               </li>
                           <ul>
 
@@ -274,7 +274,7 @@
                       <td class="names">
                         <code>
                           <a name="method_addChannel">addChannel</a>(
-                          bus:, channel:
+                          bus, channel
                           )
                         </code>
                       </td>
@@ -299,17 +299,17 @@
                           <ul>
                               <li>
                                 <code>
-                                  bus:
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
-                                 bus on top of which to create the channel (string)
+                                 bus on top of which to create the channel
                               </li>
                               <li>
                                 <code>
-                                  channel:
-                                  &lt;channel&gt;
+                                  channel
+                                  &lt;string&gt;
                                 </code>
-                                 channel to create (string)
+                                 channel to create
                               </li>
                           <ul>
 
@@ -348,9 +348,9 @@
                               <li>
                                 <code>
                                   :
-                                  &lt;bus&gt;
+                                  &lt;string&gt;
                                 </code>
-                                 bus to be deleted
+                                 bus bus to be deleted
 delete the bus
 the bus MUST exist
                               </li>
@@ -365,7 +365,7 @@ the bus MUST exist
                       <td class="names">
                         <code>
                           <a name="method_delChannel">delChannel</a>(
-                          :
+                          bus, channel
                           )
                         </code>
                       </td>
@@ -390,19 +390,18 @@ the bus MUST exist
                           <ul>
                               <li>
                                 <code>
-                                  :
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
                                  bus where the channel to be deleted lies
                               </li>
                               <li>
                                 <code>
-                                  :
-                                  &lt;channel&gt;
+                                  channel
+                                  &lt;string&gt;
                                 </code>
-                                 channel to remove
-delete the channel
-the channel MUST exist
+                                 channel to be removed. Must exist
+delete the channel.
                               </li>
                           <ul>
 
@@ -415,7 +414,7 @@ the channel MUST exist
                       <td class="names">
                         <code>
                           <a name="method_getBusMessages">getBusMessages</a>(
-                          :, :allows, :
+                          bus, options, :
                           )
                         </code>
                       </td>
@@ -440,24 +439,24 @@ the channel MUST exist
                           <ul>
                               <li>
                                 <code>
-                                  :
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
                                  bus from which to retrive messages
                               </li>
                               <li>
                                 <code>
-                                  :allows
-                                  &lt;options&gt;
+                                  options
+                                  &lt;Object&gt;
                                 </code>
-                                 to pass a "since" parameter, indicating the id of the last message retrieved before. Method will return new messages published since "since" (unless "since" is too old, in which case it will retrieve all messages in the queue).
+                                 allows to pass a "since" parameter, indicating the id of the last message retrieved before. Method will return new messages published since "since" (unless "since" is too old, in which case it will retrieve all messages in the queue).
                               </li>
                               <li>
                                 <code>
                                   :
-                                  &lt;callback&gt;
+                                  &lt;function&gt;
                                 </code>
-                                 callback method. Will be called as callback(message,error)
+                                 callback callback method. Will be called as callback(message,error)
                               </li>
                           <ul>
 
@@ -470,7 +469,7 @@ the channel MUST exist
                       <td class="names">
                         <code>
                           <a name="method_getChannelMessages">getChannelMessages</a>(
-                          :
+                          bus, channel, options, callback
                           )
                         </code>
                       </td>
@@ -495,29 +494,29 @@ the channel MUST exist
                           <ul>
                               <li>
                                 <code>
-                                  :
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
                                  bus where the channel lies
                               </li>
                               <li>
                                 <code>
-                                  :
+                                  channel
                                   &lt;channel&gt;
                                 </code>
                                  channel to retrieve the messages from
                               </li>
                               <li>
                                 <code>
-                                  :
-                                  &lt;options&gt;
+                                  options
+                                  &lt;Object&gt;
                                 </code>
                                  allows to pass a "since" parameter, indicating the id of the last message retrieved before. Method will return new messages published since "since" (unless "since" is too old, in which case it will retrieve all messages in the queue).
                               </li>
                               <li>
                                 <code>
-                                  :
-                                  &lt;callback&gt;
+                                  callback
+                                  &lt;function&gt;
                                 </code>
                                  callback method. Will be called as callback(message,error)
                               </li>
@@ -532,7 +531,7 @@ the channel MUST exist
                       <td class="names">
                         <code>
                           <a name="method_save">save</a>(
-                          :
+                          bus, channel, message
                           )
                         </code>
                       </td>
@@ -557,24 +556,24 @@ the channel MUST exist
                           <ul>
                               <li>
                                 <code>
-                                  :
-                                  &lt;bus&gt;
+                                  bus
+                                  &lt;string&gt;
                                 </code>
-                                 bus where the channel you want to post to lies
+                                 bus where the channel you want to post to lies. Must be a valid bus
                               </li>
                               <li>
                                 <code>
-                                  :
-                                  &lt;channel&gt;
+                                  channel
+                                  &lt;string&gt;
                                 </code>
                                  channel where to post the message
                               </li>
                               <li>
                                 <code>
-                                  :
-                                  &lt;content&gt;
+                                  message
+                                  &lt;backplane message&gt;
                                 </code>
-                                 message to post
+                                 backplane message to post. Must be a valid backplane message
                               </li>
                           <ul>
 
@@ -583,9 +582,6 @@ the channel MUST exist
                           <ul>
                             <li>
                               null
-bus : must be a valid, existing bus
-channel : if it does not exist, it will be created before pushing the message (MUST be base64 encoded)
-content : a valid backplane message
                             </li>
                           </ul>
                       </td>
@@ -596,7 +592,7 @@ content : a valid backplane message
                       <td class="names">
                         <code>
                           <a name="method_validate">validate</a>(
-                          :
+                          message
                           )
                         </code>
                       </td>
@@ -621,10 +617,10 @@ content : a valid backplane message
                           <ul>
                               <li>
                                 <code>
-                                  :
-                                  &lt;message&gt;
+                                  message
+                                  &lt;backplane message&gt;
                                 </code>
-                                 message to be validated
+                                 Message to be validated
 check that message is a proper Backplane message with source, type and payload
                               </li>
                           <ul>
