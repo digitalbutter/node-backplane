@@ -1,7 +1,7 @@
-var backplane = require('./backplane/backplane.js');
-var messages = require('./backplane/backplaneMessages.js');
+var backplane = require('./lib/backplane/backplane.js');
+var messages = require('./lib/backplane/backplaneMessages.js');
 
 exports.backplaneConnect = backplane.connectHandler;
 exports.backplaneHandler = backplane.handler;
-exports.createBackplanePoller = require('./backplane/BackplanePoller.js');
+exports.createBackplanePoller = require('./lib/backplane/BackplanePoller.js');
 exports.messages = messages;

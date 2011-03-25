@@ -1,30 +1,35 @@
 {
-  "name": "backplane",
-  "description": "Backplane module for node",
-  "version": "0.0.0",
-  "repository": {
+  "name": "backplane"
+  , "description": "Backplane module for node"
+  , "version": "0.0.2"
+  , "repository": {
     "type": "git",
     "url": "git://github.com/digitalbutter/node-backplane.git"
-  },
-  "author": "Ed Bosher <ed@tikibooth.com>",
-  "contributors":[ "Ed Bosher <ed@tikibooth.com>"
-                , "Emmanuel Prochasson <emmanuel@tikibooth.com>"
-                    ]
-
-  "directories": {
-    "lib": "."
-  },
-  "scripts": {
-    "test": "node specs.js"
-  },
-  "engines": {
-    "node": "*"
-  },
-  "modules": {
-    "package.json": "package.json"
-  },
-  "files": [
-    ""
-  ],
-  "main": "./index"
+  }
+  , "author": "Ed Bosher <ed@tikibooth.com>"
+  , "contributors": [
+    "Ed Bosher <ed@tikibooth.com>",
+    "Emmanuel Prochasson <emmanuel@tikibooth.com>"
+  ]
+  , "scripts": {   "test": "node specs.js"   }
+  , "engines": { "node": ">=0.4.0"  }
+  , "modules": {
+    "specs.js": "specs.js",
+    "package.json": "package.json",
+    "LICENSE": "LICENSE",
+    "README": "README",
+    "lib/utils.js": "lib/utils.js",
+    "lib/index.js": "lib/index.js",
+    "lib/backplane/backplaneMessages.js": "lib/backplane/backplaneMessages.js",
+    "lib/backplane/backplane.js": "lib/backplane/backplane.js",
+    "lib/backplane/memoryMessageStore.js": "lib/backplane/memoryMessageStore.js",
+    "lib/backplane/BackplanePoller.js": "lib/backplane/BackplanePoller.js",
+    "spec/backplane/backplaneMessages.js": "spec/backplane/backplaneMessages.js",
+    "spec/backplane/backplane.js": "spec/backplane/backplane.js",
+    "spec/backplane/memoryMessageStore.js": "spec/backplane/memoryMessageStore.js",
+    "spec/backplane/BackplanePoller.js": "spec/backplane/BackplanePoller.js"
+  }
+  , "dependencies" : ["traits","url","http","events"]
+  , "directories": { "lib": "./lib" }
+  , "main": "./index.js"
 }
