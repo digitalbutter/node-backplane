@@ -1,10 +1,13 @@
 describe("memoryMessageStore ", function(){
     describe("Store class", function(){
-
         var MMS  = require("backplane/memoryMessageStore.js").store;
-        describe("create a bus",function(){
-            it("should create a valid bus",function(){
+
+        describe("addBus function",function(){
+            beforeEach(function(){
                 MMS.addBus("valid_bus");
+            });
+
+            it("should create a valid bus",function(){
                 expect(MMS.isValidBus("valid_bus")).toBe(true);
             });
 
@@ -12,7 +15,7 @@ describe("memoryMessageStore ", function(){
 
                 it("should have created an empty valid channel on top of the valid bus",function(){
                     MMS.addChannel("valid_bus","valid_channel");
-                    expect(MMS.isValidChannel("valid_bus","valid_channel")).toBe(true)
+                    expect(MMS.isValidChannel("valid_bus","valid_channel")).toBe(true);
                     expect(MMS.content["valid_bus"]["valid_channel"].len()).toBe(0);
                 });
                 it("should have a name",function(){
@@ -52,26 +55,26 @@ describe("memoryMessageStore ", function(){
                             it("should have removed the first entry",function(){
                                 expect(MMS.content["valid_bus"]["valid_channel"].content[0].message).toBe("I am Content #2");
                                 expect(MMS.content["valid_bus"]["valid_channel"].content[9].message).toBe("I am Content #11");
-                            })
+                            });
 
                             it("entries should have different ids",function(){
                                 id1 = MMS.content["valid_bus"]["valid_channel"].content[0].id;
                                 id2 = MMS.content["valid_bus"]["valid_channel"].content[1].id;
                                 expect(id1).not.toEqual(id2);
-                            })
+                            });
                             describe("updating the size of the channel",function(){
                                 it("should clean some messages (last message should stay last",function(){
                                     MMS.content["valid_bus"]["valid_channel"].new_maxsize(5);
                                     expect(MMS.content["valid_bus"]["valid_channel"].maxsize).toBe(5);
                                     expect(MMS.content["valid_bus"]["valid_channel"].len()).toBe(5);
-                                    index = MMS.content["valid_bus"]["valid_channel"].len()-1
+                                    index = MMS.content["valid_bus"]["valid_channel"].len()-1;
                                     expect(MMS.content["valid_bus"]["valid_channel"].content[index].message).toBe("I am Content #11");
-                                })
-                            })
-                        })
-                    })
-                })
-            })
+                                });
+                            });
+                        });
+                    });
+                });
+            });
         });
     });
 
