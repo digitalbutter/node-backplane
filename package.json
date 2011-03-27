@@ -30,6 +30,5 @@
     "spec/backplane/BackplanePoller.js": "spec/backplane/BackplanePoller.js"
   }
   , "dependencies" : ["traits","url","http","events"]
-  , "directories": { "lib": "./lib" }
-  , "main": "./index.js"
+  , "directories": { "lib": "./lib/" }
 }
