@@ -13,22 +13,7 @@
   ]
   , "scripts": {   "test": "node specs.js"   }
   , "engines": { "node": ">=0.4.0"  }
-  , "modules": {
-    "specs.js": "specs.js",
-    "package.json": "package.json",
-    "LICENSE": "LICENSE",
-    "README": "README",
-    "lib/utils.js": "lib/utils.js",
-    "lib/index.js": "lib/index.js",
-    "lib/backplane/backplaneMessages.js": "lib/backplane/backplaneMessages.js",
-    "lib/backplane/backplane.js": "lib/backplane/backplane.js",
-    "lib/backplane/memoryMessageStore.js": "lib/backplane/memoryMessageStore.js",
-    "lib/backplane/BackplanePoller.js": "lib/backplane/BackplanePoller.js",
-    "spec/backplane/backplaneMessages.js": "spec/backplane/backplaneMessages.js",
-    "spec/backplane/backplane.js": "spec/backplane/backplane.js",
-    "spec/backplane/memoryMessageStore.js": "spec/backplane/memoryMessageStore.js",
-    "spec/backplane/BackplanePoller.js": "spec/backplane/BackplanePoller.js"
-  }
-  , "dependencies" : ["traits","url","http","events"]
+  , "dependencies" : ["traits"]
+  , "main": "./lib/"
   , "directories": { "lib": "./lib/" }
 }
