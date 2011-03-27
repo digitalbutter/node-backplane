@@ -104,6 +104,11 @@
             <div id="classList" class="module">
               <h4>Classes</h4>
               <ul>
+                  <li >
+                    <a href="backplane
+Handler for backplane server.html">backplane
+Handler for backplane server</a>
+                  </li>
                   <li  class="selected" >
                     <a href="memoryMessageStore.html">memoryMessageStore</a>
                   </li>
@@ -124,6 +129,9 @@
                   </li>
                   <li >
                     <a href="BackplanePoller.js.html">BackplanePoller.js</a>
+                  </li>
+                  <li >
+                    <a href="index.js.html">index.js</a>
                   </li>
                   <li >
                     <a href="memoryMessageStore.js.html">memoryMessageStore.js</a>
@@ -155,6 +163,11 @@
                   </li>
                   <li class=" ">
                     <a href="#method_getChannelMessages">getChannelMessages</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_newChannelSize
+Change the number of message stored in a channel. If when called, the channel already store more message than <size>, older messages will be swept.">newChannelSize
+Change the number of message stored in a channel. If when called, the channel already store more message than <size>, older messages will be swept.</a>
                   </li>
                   <li class=" ">
                     <a href="#method_save">save</a>
@@ -193,11 +206,13 @@
 
         <div class="summary description">
           The memoryMessageStore class deals with:
-- storing the message in memory
-- validating messages
-- bus and channel management (creation, access)
-- providing messages (for bus and/or channel)
-- cleaning outdated messages
+<ul>
+<li> storing the message in memory</li>
+<li> validating messages</li>
+<li> bus and channel management (creation, access)</li>
+<li> providing messages (for bus and/or channel)</li>
+<li> cleaning outdated messages</li>
+</ul>
         </div>
         
 
@@ -442,7 +457,7 @@ delete the channel.
                                   bus
                                   &lt;string&gt;
                                 </code>
-                                 bus from which to retrive messages
+                                 bus from which to retrieve messages
                               </li>
                               <li>
                                 <code>
@@ -502,7 +517,7 @@ delete the channel.
                               <li>
                                 <code>
                                   channel
-                                  &lt;channel&gt;
+                                  &lt;string&gt;
                                 </code>
                                  channel to retrieve the messages from
                               </li>
@@ -519,6 +534,64 @@ delete the channel.
                                   &lt;function&gt;
                                 </code>
                                  callback method. Will be called as callback(message,error)
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_newChannelSize
+Change the number of message stored in a channel. If when called, the channel already store more message than <size>, older messages will be swept.">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_newChannelSize
+Change the number of message stored in a channel. If when called, the channel already store more message than <size>, older messages will be swept.">newChannelSize
+Change the number of message stored in a channel. If when called, the channel already store more message than <size>, older messages will be swept.</a>(
+                          bus, channel, size
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  bus
+                                  &lt;string&gt;
+                                </code>
+                                 bus where the channel lies
+                              </li>
+                              <li>
+                                <code>
+                                  channel
+                                  &lt;string&gt;
+                                </code>
+                                 channel
+                              </li>
+                              <li>
+                                <code>
+                                  size
+                                  &lt;int&gt;
+                                </code>
+                                 number of message to store in the channel
                               </li>
                           <ul>
 

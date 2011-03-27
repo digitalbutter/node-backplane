@@ -1,4 +1,4 @@
-YAHOO.env.classMap = {"memoryMessageStore": "utils", "TBind": "utils", "Store": "utils", "Channel": "utils"};
+YAHOO.env.classMap = {"backplane\nHandler for backplane server": "utils", "memoryMessageStore": "utils", "TBind": "utils", "Store": "utils", "Channel": "utils"};
 
 YAHOO.env.resolveClass = function(className) {
     var a=className.split('.'), ns=YAHOO.env.classMap;

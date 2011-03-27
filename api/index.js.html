@@ -12,8 +12,8 @@
   <title>
     API: utils
     
-      &rarr; TBind class
     
+      &rarr; index.js (file)
     
   </title>
 
@@ -78,8 +78,8 @@
         <a href="./index.html" title="node-backplane">node-backplane</a>
           &rarr; module <a href="./module_utils.html" title="utils">utils</a>
           
-            &rarr; class TBind
           
+            &rarr; file index.js
           
       </div>
     </div> <!--! end of #sub-hd -->
@@ -112,7 +112,7 @@ Handler for backplane server</a>
                   <li >
                     <a href="memoryMessageStore.html">memoryMessageStore</a>
                   </li>
-                  <li  class="selected" >
+                  <li >
                     <a href="TBind.html">TBind</a>
                   </li>
               </ul>
@@ -130,7 +130,7 @@ Handler for backplane server</a>
                   <li >
                     <a href="BackplanePoller.js.html">BackplanePoller.js</a>
                   </li>
-                  <li >
+                  <li  class="selected" >
                     <a href="index.js.html">index.js</a>
                   </li>
                   <li >
@@ -143,14 +143,6 @@ Handler for backplane server</a>
             </div>
 
 
-            <div id="methodsList" class="module">
-              <h4>Methods</h4>
-              <ul>
-                  <li class=" ">
-                    <a href="#method_bind">bind</a>
-                  </li>
-              </ul>
-            </div>
 
 
 
@@ -162,116 +154,31 @@ Handler for backplane server</a>
     <div id="content" class="grid_12">
       
 
-      
-        <h2>
-          
 
-          
+        <!--! source code view -->
+        <div id="srcout">
+          <h2>
+            file <strong>index.js</strong>
+          </h2>
 
-          
+          <div class="highlight"><pre><span class="c1">//This exports the public objects</span>
+<span class="c1">//Backplane hadnlers</span>
+<span class="kd">var</span> <span class="nx">backplane</span> <span class="o">=</span> <span class="k">new</span> <span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./backplane.js&#39;</span><span class="p">).</span><span class="nx">Backplane</span><span class="p">)();</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">backplaneConnect</span> <span class="o">=</span> <span class="nx">backplane</span><span class="p">.</span><span class="nx">connectHandler</span><span class="p">;</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">backplaneHandler</span> <span class="o">=</span> <span class="nx">backplane</span><span class="p">.</span><span class="nx">handler</span><span class="p">;</span>
 
-          class <strong>TBind</strong>
-          
-        </h2>
+<span class="c1">//Messages</span>
+<span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./backplaneMessages.js&#39;</span><span class="p">);</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">messages</span> <span class="o">=</span> <span class="nx">messages</span><span class="p">;</span>
 
-        <!-- class tree goes here -->
+<span class="c1">//Memory message store</span>
+<span class="kd">var</span> <span class="nx">memoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./memoryMessageStore.js&#39;</span><span class="p">).</span><span class="nx">memoryMessageStore</span><span class="p">;</span>
 
+<span class="c1">//Poller</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">createBackplanePoller</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./BackplanePoller.js&#39;</span><span class="p">);</span>
+</pre></div>
 
-
-        <div class="summary description">
-          A Trait class for holding helper functions for enforcing scope
         </div>
-        
-
-
-
-        <div class="clear"></div>
-
-
-
-
-
-
-          <div class="section methods" resource="#methods">
-              <h3>Methods</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>
-                      Methods
-                    </th>
-                    <th>
-                      Returns
-                    </th>
-                    <th>
-                      Description
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                    <tr class=" " resource="#method_bind">
-
-                      <td class="names">
-                        <code>
-                          <a name="method_bind">bind</a>(
-                          fn
-                          )
-                        </code>
-                      </td>
-
-                      <td class="returns">
-                        <code>
-                          function
-                        </code>
-
-                        
-                        
-                        
-                      </td>
-
-                      <td class="description">
-                        <a href="#top" class="top" title="Jump back to the top">↑</a>
-
-
-                        A bind function which binds the scope of the function to be called to the local scope of the object.
-
-                          <p>Parameters:</p>
-                          <ul>
-                              <li>
-                                <code>
-                                  fn
-                                  &lt;function&gt;
-                                </code>
-                                 The function to bind the local scope to
-                              </li>
-                          <ul>
-
-
-                          <p>Returns:</p>
-                          <ul>
-                            <li>
-                                <code>
-                                  &lt;function&gt;
-                                </code>
-                              The function passed in bound to the local scope
-                            </li>
-                          </ul>
-                      </td>
-
-                    </tr>
-
-                </tbody>
-              </table>
-
-
-
-          </div>
-
-
-
-
-
 
     </div>
 

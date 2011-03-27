@@ -105,6 +105,11 @@
               <h4>Classes</h4>
               <ul>
                   <li >
+                    <a href="backplane
+Handler for backplane server.html">backplane
+Handler for backplane server</a>
+                  </li>
+                  <li >
                     <a href="memoryMessageStore.html">memoryMessageStore</a>
                   </li>
                   <li >
@@ -124,6 +129,9 @@
                   </li>
                   <li >
                     <a href="BackplanePoller.js.html">BackplanePoller.js</a>
+                  </li>
+                  <li >
+                    <a href="index.js.html">index.js</a>
                   </li>
                   <li >
                     <a href="memoryMessageStore.js.html">memoryMessageStore.js</a>
@@ -154,117 +162,118 @@
           </h2>
 
           <div class="highlight"><pre><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./../utils.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./utils.js&#39;</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">memoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./memoryMessageStore.js&quot;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">MemoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./memoryMessageStore.js&quot;</span><span class="p">).</span><span class="nx">MemoryMessageStore</span><span class="p">;</span>
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="kd">var</span> <span class="nx">my</span> <span class="o">=</span> <span class="p">{};</span>
 
-    <span class="c1">//Interfaces for objects that need to be set</span>
-    <span class="nx">my</span><span class="p">.</span><span class="nx">authHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">){</span>
-        <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs an authentication callback to function.&quot;</span> <span class="p">}</span>
+<span class="kd">var</span> <span class="nx">Backplane</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<span class="cm">/**</span>
+<span class="cm"> * @class backplane</span>
+<span class="cm"> * Handler for backplane server</span>
+<span class="cm"> * @param username</span>
+<span class="cm"> * @param password</span>
+<span class="cm"> */</span>
+<span class="p">};</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">authHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">){</span>
+    <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs an authentication callback to function.&quot;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">decode64Handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">encodedString</span><span class="p">){</span>
+    <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a base64 decoder to function.&quot;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">messageStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MemoryMessageStore</span><span class="p">();</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">){</span>
+    <span class="c1">//Check it is the Basic HTTP Authentication otherwise throw an exception</span>
+    <span class="kd">var</span> <span class="nx">basicAuthRegex</span> <span class="o">=</span> <span class="sr">/^Basic (.*)/</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">basicAuthRegex</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">authentication</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">result</span><span class="p">)</span> <span class="k">throw</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;AuthenticationException&quot;</span>
+        <span class="p">,</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;The backplane library only supports basic Authentication.&quot;</span>
+        <span class="p">,</span><span class="nx">authenticationHeader</span><span class="o">:</span> <span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">authentication</span>
     <span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">decode64Handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">encodedString</span><span class="p">){</span>
-        <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs a base64 decoder to function.&quot;</span> <span class="p">}</span>
+    <span class="c1">//Check the result with the authentication handler</span>
+    <span class="kd">var</span> <span class="nx">authStr</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">authStr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">decode64Handler</span><span class="p">(</span><span class="nx">authStr</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">authHandler</span><span class="p">(</span><span class="nx">authStr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nx">authStr</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">};</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processGetBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">){</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">});</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">));</span>
     <span class="p">};</span>
+<span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span> <span class="o">=</span> <span class="p">{</span> 
-        <span class="nx">save</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">content</span><span class="p">)</span> <span class="p">}</span>
-        <span class="p">,</span><span class="nx">getChannelMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">}</span>
-        <span class="p">,</span><span class="nx">getBusMessages</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">memoryMessageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">callback</span><span class="p">)</span> <span class="p">}</span>
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processGetChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">){</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">});</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">));</span>
     <span class="p">};</span>
+<span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">validate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">){</span>
-        <span class="c1">//Check it is the Basic HTTP Authentication otherwise throw an exception</span>
-        <span class="kd">var</span> <span class="nx">basicAuthRegex</span> <span class="o">=</span> <span class="sr">/^Basic (.*)/</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">basicAuthRegex</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">authentication</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">result</span><span class="p">)</span> <span class="k">throw</span> <span class="p">{</span>
-            <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;AuthenticationException&quot;</span>
-            <span class="p">,</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;The backplane library only supports basic Authentication.&quot;</span>
-            <span class="p">,</span><span class="nx">authenticationHeader</span><span class="o">:</span> <span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">authentication</span>
-        <span class="p">};</span>
-
-        <span class="c1">//Check the result with the authentication handler</span>
-        <span class="kd">var</span> <span class="nx">authStr</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="nx">authStr</span> <span class="o">=</span> <span class="nx">my</span><span class="p">.</span><span class="nx">decode64Handler</span><span class="p">(</span><span class="nx">authStr</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">my</span><span class="p">.</span><span class="nx">authHandler</span><span class="p">(</span><span class="nx">authStr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nx">authStr</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processPost</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">){</span>
+    <span class="nx">req</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">){</span>
+        <span class="nx">req</span><span class="p">.</span><span class="nx">content</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span>
     <span class="p">};</span>
+<span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">processGetBus</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">){</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">});</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">));</span>
-        <span class="p">};</span>
-    <span class="p">};</span>
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">postEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">processGetChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">){</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">});</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">));</span>
-        <span class="p">};</span>
-    <span class="p">};</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">processPost</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">){</span>
-        <span class="nx">req</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">){</span>
-            <span class="nx">req</span><span class="p">.</span><span class="nx">content</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span>
-        <span class="p">};</span>
-    <span class="p">};</span>
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+    <span class="nx">utils</span><span class="p">.</span><span class="nx">mergeOptions</span><span class="p">(</span><span class="k">this</span><span class="p">,[</span><span class="s1">&#39;authHandler&#39;</span><span class="p">,</span><span class="s1">&#39;decode64Handler&#39;</span><span class="p">,</span><span class="s1">&#39;messageStore&#39;</span><span class="p">],</span><span class="nx">options</span><span class="p">);</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">postEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
-        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">bus</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
 
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
-            <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
-            <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+        <span class="k">switch</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="p">){</span>
+            <span class="k">case</span> <span class="s2">&quot;GET&quot;</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processGetChannel</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+                <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processGetBus</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s2">&quot;POST&quot;</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">)){</span>
+                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processPost</span><span class="p">(</span><span class="nx">req</span><span class="p">));</span>
+                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">postEnd</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">&quot;Wrong username and/or password.&quot;</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">throw</span> <span class="s2">&quot;Method Not implemented&quot;</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
+<span class="p">};</span>
 
-    <span class="nx">my</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
-        <span class="nx">utils</span><span class="p">.</span><span class="nx">mergeOptions</span><span class="p">(</span><span class="nx">my</span><span class="p">,[</span><span class="s1">&#39;authHandler&#39;</span><span class="p">,</span><span class="s1">&#39;decode64Handler&#39;</span><span class="p">,</span><span class="s1">&#39;messageStore&#39;</span><span class="p">],</span><span class="nx">options</span><span class="p">);</span>
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">connectHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+    <span class="nx">callback</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">handler</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
 
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">){</span>
-            <span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">bus</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
-
-            <span class="k">switch</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="p">){</span>
-                <span class="k">case</span> <span class="s2">&quot;GET&quot;</span><span class="o">:</span>
-                    <span class="k">if</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">my</span><span class="p">.</span><span class="nx">processGetChannel</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
-                    <span class="k">else</span> <span class="nx">my</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">my</span><span class="p">.</span><span class="nx">processGetBus</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">case</span> <span class="s2">&quot;POST&quot;</span><span class="o">:</span>
-                    <span class="k">if</span><span class="p">(</span><span class="nx">my</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">)){</span>
-                        <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="nx">my</span><span class="p">.</span><span class="nx">processPost</span><span class="p">(</span><span class="nx">req</span><span class="p">));</span>
-                        <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="nx">my</span><span class="p">.</span><span class="nx">postEnd</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">));</span>
-                    <span class="p">}</span>
-                    <span class="k">else</span><span class="p">{</span>
-                        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
-                        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">&quot;Wrong username and/or password.&quot;</span><span class="p">);</span>
-                    <span class="p">}</span>
-                    <span class="k">break</span><span class="p">;</span>
-                <span class="k">default</span><span class="o">:</span>
-                    <span class="k">throw</span> <span class="s2">&quot;Method Not implemented&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
-    <span class="p">};</span>
-
-    <span class="nx">my</span><span class="p">.</span><span class="nx">connectHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
-        <span class="nx">callback</span> <span class="o">=</span> <span class="nx">my</span><span class="p">.</span><span class="nx">handler</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-
-        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">urlRegex</span> <span class="o">=</span> <span class="sr">/^\/v1\/bus\//</span><span class="p">;</span>
-            <span class="k">if</span><span class="p">(</span><span class="nx">urlRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">)){</span>
-                <span class="nx">callback</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="nx">next</span><span class="p">();</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">urlRegex</span> <span class="o">=</span> <span class="sr">/^\/v1\/bus\//</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">urlRegex</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">)){</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">);</span>
         <span class="p">}</span>
-    <span class="p">};</span>
+        <span class="k">else</span> <span class="nx">next</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-    <span class="k">return</span> <span class="nx">my</span><span class="p">;</span>
-<span class="p">})();</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">Backplane</span> <span class="o">=</span> <span class="nx">Backplane</span><span class="p">;</span>
 </pre></div>
 
         </div>
