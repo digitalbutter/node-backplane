@@ -17,6 +17,6 @@ process.argv.forEach(function(arg){
 });
 
 
-jasmine.executeSpecsInFolder(__dirname + '/spec', function(runner, log){
+jasmine.executeSpecsInFolder(__dirname + '/test', function(runner, log){
   process.exit(runner.results().failedCount);
 }, isVerbose, showColors);

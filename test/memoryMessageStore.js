@@ -61,7 +61,7 @@ describe("memoryMessageStore ", function(){
                             })
                             describe("updating the size of the channel",function(){
                                 it("should clean some messages (last message should stay last",function(){
-                                    MMS.content["valid_bus"]["valid_channel"].new_maxsize(5);
+                                    MMS.channelMaxSize("valid_bus","valid_channel",5);
                                     expect(MMS.content["valid_bus"]["valid_channel"].maxsize).toBe(5);
                                     expect(MMS.content["valid_bus"]["valid_channel"].len()).toBe(5);
                                     index = MMS.content["valid_bus"]["valid_channel"].len()-1

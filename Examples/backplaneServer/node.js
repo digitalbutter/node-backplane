@@ -3,7 +3,7 @@ var base64 = require('base64');
 
 var sys = require('sys');
 
-var echo = require('echo');
+var backplane = require('./../../index.js');
 
 var port = 8001;
 
@@ -11,6 +11,8 @@ var authenticationHandler = function(username,password){
     return username === 'valid_bus' && password === 'valid_key';
 };
 
+
+// This has been implemented, we should not need it anymore.
 var messageStore = {
     valid_bus: {}
     ,checkChannel: function(channel){
@@ -37,7 +39,7 @@ var messageStore = {
 };
 
 //Setup the backplaneHandler
-var backplaneHandler = echo.backplaneHandler({ authHandler: authenticationHandler, decode64Handler: base64.decode, messageStore: messageStore });
+var backplaneHandler = backplane.backplaneHandler({ authHandler: authenticationHandler, decode64Handler: base64.decode });
 
 var handler = function(req,res){
     //Catch exceptions to return appropriate responses
