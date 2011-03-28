@@ -1,0 +1,6 @@
+base_url: 'http://localhost:8001'
+backplane:
+  version: v1
+valid_info:
+  bus: "valid_bus1"
+  key: "unguessable_key"
