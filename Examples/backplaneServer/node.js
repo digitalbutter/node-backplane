@@ -3,7 +3,7 @@ var base64 = require('base64');
 
 var sys = require('sys');
 
-var backplane = require('./../../index.js');
+var backplane = require('./../../lib/index.js');
 
 var port = 8001;
 

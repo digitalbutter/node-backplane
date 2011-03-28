@@ -3,8 +3,6 @@ var connect = require('connect'),
 
 var base64 = require('base64');
 
-var echo = require('echo');
-
 var port = 8001;
 
 var authenticationHandler = function(username,password){
