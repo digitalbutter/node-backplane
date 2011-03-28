@@ -163,21 +163,58 @@ Handler for backplane server</a>
 
           <div class="highlight"><pre><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./utils.js&#39;</span><span class="p">);</span>
-
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">MemoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./memoryMessageStore.js&quot;</span><span class="p">).</span><span class="nx">MemoryMessageStore</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">);</span>
 
 
 <span class="kd">var</span> <span class="nx">Backplane</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
 <span class="cm">/**</span>
 <span class="cm"> * @class backplane</span>
 <span class="cm"> * Handler for backplane server</span>
-<span class="cm"> * @param username</span>
-<span class="cm"> * @param password</span>
+<span class="cm"> * @param {json file} secrets file containing {username:&quot;username&quot;,password:&quot;password&quot;} for authentication</span>
 <span class="cm"> */</span>
 <span class="p">};</span>
 
-<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">authHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span><span class="nx">password</span><span class="p">){</span>
-    <span class="k">throw</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Echo: Option not set exception&quot;</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Backplane needs an authentication callback to function.&quot;</span> <span class="p">}</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">loadSecrets</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">secrets</span><span class="p">){</span>
+    <span class="cm">/**</span>
+<span class="cm">     * Loads secret for connecting to a bus</span>
+<span class="cm">     * As a matter of fact, also pop the buses</span>
+<span class="cm">     * @param {file} secrets json file containing bus/secrets, default secrets.json</span>
+<span class="cm">     */</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">secrets</span><span class="p">){</span>
+        <span class="nx">data</span><span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s2">&quot;./secrets.json&quot;</span><span class="p">,</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+        <span class="k">try</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nx">data</span><span class="p">)}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">}</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">data</span><span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">secrets</span><span class="p">,</span><span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+        <span class="k">try</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nx">data</span><span class="p">)}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Creates buses for each entry</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span><span class="p">){</span>
+        <span class="nx">entry</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">addBus</span><span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">bus</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">authHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">key</span><span class="p">){</span>
+    <span class="cm">/**</span>
+<span class="cm">     * @method authHandler</span>
+<span class="cm">     * Deals with authentication, using md5 hash</span>
+<span class="cm">     * Read and md5sum the password, and compare it with the one in the secrets.json file</span>
+<span class="cm">     * @param {string} bus bus to interact with</span>
+<span class="cm">     * @param {string} key secret key for this bus</span>
+<span class="cm">     */</span>
+    <span class="kd">var</span> <span class="nx">entry</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span><span class="p">){</span>
+        <span class="nx">entry</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">secrets</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">bus</span> <span class="o">==</span> <span class="nx">bus</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="nx">key</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">decode64Handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">encodedString</span><span class="p">){</span>
@@ -206,7 +243,7 @@ Handler for backplane server</a>
     <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">){</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">});</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">messageArray</span><span class="p">));</span>
-    <span class="p">};</span>
+    <span class="p">}</span>
 <span class="p">};</span>
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">processGetChannel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">){</span>
@@ -225,9 +262,10 @@ Handler for backplane server</a>
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">postEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span>
 
     <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
+        <span class="nx">scope</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
         <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
     <span class="p">}</span>
@@ -235,24 +273,30 @@ Handler for backplane server</a>
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
     <span class="nx">utils</span><span class="p">.</span><span class="nx">mergeOptions</span><span class="p">(</span><span class="k">this</span><span class="p">,[</span><span class="s1">&#39;authHandler&#39;</span><span class="p">,</span><span class="s1">&#39;decode64Handler&#39;</span><span class="p">,</span><span class="s1">&#39;messageStore&#39;</span><span class="p">],</span><span class="nx">options</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">loadSecrets</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
     <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">).</span><span class="nx">pathname</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">bus</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
 
+        <span class="kd">var</span> <span class="nx">since</span> <span class="o">=</span> <span class="p">{};</span>
+
         <span class="k">switch</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="p">){</span>
             <span class="k">case</span> <span class="s2">&quot;GET&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processGetChannel</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
-                <span class="k">else</span> <span class="k">this</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processGetBus</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">channel</span><span class="p">)</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getChannelMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">scope</span><span class="p">.</span><span class="nx">processGetChannel</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
+                <span class="k">else</span> <span class="nx">scope</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">since</span><span class="p">,</span><span class="nx">scope</span><span class="p">.</span><span class="nx">processGetBus</span><span class="p">(</span><span class="nx">res</span><span class="p">));</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;POST&quot;</span><span class="o">:</span>
-                <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">)){</span>
-                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">processPost</span><span class="p">(</span><span class="nx">req</span><span class="p">));</span>
-                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">postEnd</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">));</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">scope</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">)){</span>
+                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="nx">scope</span><span class="p">.</span><span class="nx">processPost</span><span class="p">(</span><span class="nx">req</span><span class="p">));</span>
+                    <span class="nx">req</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span><span class="nx">scope</span><span class="p">.</span><span class="nx">postEnd</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">));</span>
                 <span class="p">}</span>
                 <span class="k">else</span><span class="p">{</span>
+<span class="c1">//                    res.writeHead({error:{type:&quot;Unauthorized&quot;,message:&quot;Wrong username and/or password.&quot;, code:&quot;401&quot;}});</span>
                     <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">401</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">});</span>
-                    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s2">&quot;Wrong username and/or password.&quot;</span><span class="p">);</span>
+
+                    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="nx">error</span><span class="o">:</span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="s2">&quot;Unauthorized&quot;</span><span class="p">,</span><span class="nx">message</span><span class="o">:</span><span class="s2">&quot;Wrong username and/or password.&quot;</span><span class="p">,</span> <span class="nx">code</span><span class="o">:</span><span class="s2">&quot;401&quot;</span><span class="p">}}));</span>
                 <span class="p">}</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">default</span><span class="o">:</span>
