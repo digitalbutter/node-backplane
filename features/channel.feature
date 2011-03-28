@@ -35,3 +35,22 @@ Feature: Backplane channel implementation (http://backplanespec.googlegroups.com
     When I post a valid message to a random channel
     Then I should receive an HTTP Response code of "401"
     And  a "401", "Unauthorized" json error object with the message "Wrong username and/or password."
+
+  Scenario: Retrieve unread messages only
+    Given a valid api key
+    When I post a valid message to a random channel
+    Then I should receive an HTTP Response code of "200"
+    When I get messages from that channel
+    And receive the same message back
+    When I post another valid message to the same channel
+    Then I should receive an HTTP Response code of "200"
+    When I get messages from that channel
+    Then I should receive an HTTP Response code of "200"
+    And receive both messages back
+    When I post another valid message to the same channel
+    Then I should receive an HTTP Response code of "200"
+    When I get new messages from that channel
+    Then I should receive an HTTP Response code of "200"
+    And receive only the last message back
+
+
