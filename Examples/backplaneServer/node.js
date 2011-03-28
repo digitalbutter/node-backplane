@@ -1,3 +1,8 @@
+// To test this example, edit the config.yml file (in features/) and chose "node.js" as the server
+// Then run "cucumber features"
+
+
+// This example uses regular node stuff
 var http = require('http');
 var base64 = require('base64');
 var sys = require('sys');

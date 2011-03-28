@@ -11,7 +11,7 @@ Before do
   @config = config
   @defaults = Defaults.new(config)
   # Starting the server:
-  @server = IO.popen("node Examples/backplaneServer/node.js > /dev/null")
+  @server = IO.popen("node Examples/backplaneServer/#{@config["server"]} > /dev/null")
 
   system('sleep 0.3') # give it some time to set up and listen
 end

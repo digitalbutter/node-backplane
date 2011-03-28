@@ -3,6 +3,8 @@ Feature: Backplane channel implementation (http://backplanespec.googlegroups.com
   As a javascript widget server
   I want to securely post messages and anonymously consume messages on a randomly generated channel
 
+  Background: I want a fresh started server! 
+
   Scenario: Get an empty channel
     Given a valid api key
     When I get an empty channel
