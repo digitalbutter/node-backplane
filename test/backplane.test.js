@@ -18,6 +18,9 @@ MockResponse.prototype.end = function(){};
 
 describe('backplane', function(){
     var backplane = new (require('backplane.js').Backplane)();
+    beforeEach(function(){
+        spyOn(backplane,"loadSecrets").andReturn();
+    });
     describe("handler", function(){
         var callback;
 

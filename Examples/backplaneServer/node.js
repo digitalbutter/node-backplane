@@ -1,45 +1,18 @@
 var http = require('http');
 var base64 = require('base64');
-
 var sys = require('sys');
 
-var backplane = require('./../../lib/index.js');
+
+var backplane;
+try {
+    Backplane = require('backplane').Backplane; // If the package is installed on your system
+} catch(err) {
+    Backplane = require('./../../lib/index.js').Backplane; // Otherwise, direct link to the index file.
+}
 
 var port = 8001;
 
-var authenticationHandler = function(username,password){
-    return username === 'valid_bus' && password === 'valid_key';
-};
-
-
-// This has been implemented, we should not need it anymore.
-var messageStore = {
-    valid_bus: {}
-    ,checkChannel: function(channel){
-        if(!messageStore.valid_bus[channel]) messageStore.valid_bus[channel] = [];
-    }
-    ,save: function(bus,channel,message){
-        console.log('bus:' + bus + " ,channel: " + channel + " ,message: " + message);
-        messageStore.checkChannel(channel);
-        messageStore.valid_bus[channel].push(message);
-    }
-    ,getChannelMessages: function(bus, channel,callback){
-        console.log('getChannel: ' + channel);
-        console.log(messageStore.valid_bus[channel]);
-        messageStore.checkChannel(channel);
-        callback(messageStore.valid_bus[channel]);
-    }
-    ,getBusMessages: function(bus,callback){
-        var messages = [];
-        for(var channel in messageStore.valid_bus){
-            messages = messages.concat(messageStore.valid_bus[channel]);
-        }
-        callback(messages);
-    }
-};
-
-//Setup the backplaneHandler
-var backplaneHandler = backplane.backplaneHandler({ authHandler: authenticationHandler, decode64Handler: base64.decode });
+var backplaneHandler = (new Backplane()).handler({ decode64Handler: base64.decode });
 
 var handler = function(req,res){
     //Catch exceptions to return appropriate responses
