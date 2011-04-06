@@ -10,8 +10,15 @@ config = YAML.load_file "features/config.yml"
 Before do
   @config = config
   @defaults = Defaults.new(config)
+
   # Starting the server:
-  @pipe = IO.popen("node Examples/backplaneServer/#{@config["server"]}", "r")
+  if(ENV["FILENAME"])
+    @filename = ENV["FILENAME"]
+  else
+    @filename = @config["server"]
+  end
+
+  @pipe = IO.popen("node Examples/backplaneServer/#{@filename}")
 
   system('sleep 0.3') # give it some time to set up and listen
 end

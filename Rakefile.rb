@@ -37,15 +37,13 @@ task :unit_test do
      puts `node specs.js`
 end
 
-namespace :features do
-  Cucumber::Rake::Task.new(:node) do |t|
+  Cucumber::Rake::Task.new(:test_node) do |t|
     t.profile = "node"
   end
 
-  Cucumber::Rake::Task.new(:connect) do |t|
+  Cucumber::Rake::Task.new(:test_connect) do |t|
     t.profile = "connect"
   end
-end
 
 desc "Full test"
 task :full_test => [:unit_test, :test_node, :test_connect] do
