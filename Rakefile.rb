@@ -30,4 +30,22 @@ task :clean_and_clobber => [:clean, :clobber] do
 end
 
 #Actual tasks for this project used by teamcity
-#none
+desc "Unit tests"
+task :unit_test do
+
+end
+
+desc "Test Connect"
+task :test_node do
+
+end
+
+desc "Test Connect"
+task :test_connect do
+
+end
+
+desc "Full test"
+task :full_test => [:unit_test, :test_node, :test_connect] do
+  puts "Running full test suite"
+end

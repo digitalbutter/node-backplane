@@ -11,7 +11,7 @@ Before do
   @config = config
   @defaults = Defaults.new(config)
   # Starting the server:
-  @server = IO.popen("node Examples/backplaneServer/#{@config["server"]} > /dev/null")
+  @pipe = IO.popen("node Examples/backplaneServer/#{@config["server"]}", "r")
 
   system('sleep 0.3') # give it some time to set up and listen
 end
@@ -19,7 +19,7 @@ end
 
 # After each
 After do
-  system("killall node") # Hope it didn't kill another running server'
+  Process.kill("KILL", @pipe.pid)
 end
 
 # "after all"
