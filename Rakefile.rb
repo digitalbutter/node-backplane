@@ -1,6 +1,8 @@
 require 'yaml'
 require 'rake/clean'
 require 'ftools'
+require 'cucumber'
+require 'cucumber/rake/task'
 
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 
@@ -32,17 +34,17 @@ end
 #Actual tasks for this project used by teamcity
 desc "Unit tests"
 task :unit_test do
-
+     puts `node specs.js`
 end
 
-desc "Test Connect"
-task :test_node do
+namespace :features do
+  Cucumber::Rake::Task.new(:node) do |t|
+    t.profile = "node"
+  end
 
-end
-
-desc "Test Connect"
-task :test_connect do
-
+  Cucumber::Rake::Task.new(:connect) do |t|
+    t.profile = "connect"
+  end
 end
 
 desc "Full test"
