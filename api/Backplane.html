@@ -142,11 +142,10 @@
               <h4>Methods</h4>
               <ul>
                   <li class=" ">
-                    <a href="#method_authHandler
-Deals with authentication, using md5 hash
-Read and md5sum the password, and compare it with the one in the secrets.json file">authHandler
-Deals with authentication, using md5 hash
-Read and md5sum the password, and compare it with the one in the secrets.json file</a>
+                    <a href="#method_authHandler">authHandler</a>
+                  </li>
+                  <li class=" ">
+                    <a href="#method_loadSecrets">loadSecrets</a>
                   </li>
               </ul>
             </div>
@@ -209,17 +208,11 @@ Read and md5sum the password, and compare it with the one in the secrets.json fi
                 </thead>
                 <tbody>
 
-                    <tr class=" " resource="#method_authHandler
-Deals with authentication, using md5 hash
-Read and md5sum the password, and compare it with the one in the secrets.json file">
+                    <tr class=" " resource="#method_authHandler">
 
                       <td class="names">
                         <code>
-                          <a name="method_authHandler
-Deals with authentication, using md5 hash
-Read and md5sum the password, and compare it with the one in the secrets.json file">authHandler
-Deals with authentication, using md5 hash
-Read and md5sum the password, and compare it with the one in the secrets.json file</a>(
+                          <a name="method_authHandler">authHandler</a>(
                           bus, key
                           )
                         </code>
@@ -239,7 +232,7 @@ Read and md5sum the password, and compare it with the one in the secrets.json fi
                         <a href="#top" class="top" title="Jump back to the top">↑</a>
 
 
-                        
+                        Read the password, and compare it with the one in the secrets.json file
 
                           <p>Parameters:</p>
                           <ul>
@@ -256,6 +249,47 @@ Read and md5sum the password, and compare it with the one in the secrets.json fi
                                   &lt;string&gt;
                                 </code>
                                  secret key for this bus
+                              </li>
+                          <ul>
+
+
+                      </td>
+
+                    </tr>
+                    <tr class=" " resource="#method_loadSecrets">
+
+                      <td class="names">
+                        <code>
+                          <a name="method_loadSecrets">loadSecrets</a>(
+                          secrets
+                          )
+                        </code>
+                      </td>
+
+                      <td class="returns">
+                        <code>
+                          void
+                        </code>
+
+                        
+                        
+                        
+                      </td>
+
+                      <td class="description">
+                        <a href="#top" class="top" title="Jump back to the top">↑</a>
+
+
+                        Loads secret for connecting to a bus. As a matter of fact, also pop the buses
+
+                          <p>Parameters:</p>
+                          <ul>
+                              <li>
+                                <code>
+                                  secrets
+                                  &lt;file&gt;
+                                </code>
+                                 json file containing bus/secrets, default secrets.json
                               </li>
                           <ul>
 
