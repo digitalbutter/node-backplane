@@ -125,9 +125,6 @@ Handler for backplane server</a>
                     <a href="backplane.js.html">backplane.js</a>
                   </li>
                   <li >
-                    <a href="backplaneMessages.js.html">backplaneMessages.js</a>
-                  </li>
-                  <li >
                     <a href="BackplanePoller.js.html">BackplanePoller.js</a>
                   </li>
                   <li  class="selected" >
@@ -162,11 +159,11 @@ Handler for backplane server</a>
           </h2>
 
           <div class="highlight"><pre><span class="c1">//This exports the public objects</span>
-<span class="c1">//Backplane hadnlers</span>
+<span class="c1">//Backplane handlers</span>
 
 
 <span class="kd">var</span> <span class="nx">Backplane</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./backplane.js&#39;</span><span class="p">).</span><span class="nx">Backplane</span><span class="p">;</span>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">Backplane</span> <span class="o">=</span> <span class="nx">Backplane</span><span class="p">;</span> <span class="c1">// When require()-d, you then need to instanciate the Backplane object.</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">Backplane</span> <span class="o">=</span> <span class="nx">Backplane</span><span class="p">;</span> <span class="c1">// When require()-d, you then need to instantiate the Backplane object.</span>
 
 
 <span class="cm">/**</span>
