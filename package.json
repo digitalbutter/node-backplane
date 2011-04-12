@@ -1,7 +1,7 @@
 {
   "name": "backplane"
   , "description": "Backplane module for node"
-  , "version": "0.0.2"
+  , "version": "0.0.3"
   , "repository": {
     "type": "git",
     "url": "git://github.com/digitalbutter/node-backplane.git"
