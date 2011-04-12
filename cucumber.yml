@@ -2,6 +2,6 @@
 ##YAML Template
 # ie profile executes the browser features with Internet Explorer
 ---
-default:
+default: FILENAME=node.js
 connect: FILENAME=connect.js
 node: FILENAME=node.js
