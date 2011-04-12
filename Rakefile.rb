@@ -49,3 +49,8 @@ desc "Full test"
 task :full_test => [:unit_test, :test_node, :test_connect] do
   puts "Running full test suite"
 end
+
+desc "Default"
+task :default => [:full_test] do
+  puts "Default"
+end

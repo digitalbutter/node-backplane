@@ -20,7 +20,7 @@ Before do
 
   @pipe = IO.popen("node Examples/backplaneServer/#{@filename}")
 
-  system('sleep 0.3') # give it some time to set up and listen
+  system('sleep 1') # give it some time to set up and listen
 end
 
 
