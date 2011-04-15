@@ -20,5 +20,5 @@ pre { background: #000; color: #fff; padding: 15px;}
 hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
 .footer { text-align:center; padding-top:30px; font-style: italic; }
 
-.gister-gist .gist-file .gist-data pre span { font-size: 0.9em; }
-.gister-gist .gist-file .gist-meta span { font-size:  0.80em; }
+.gister-gist .gist-file .gist-data pre span { font-size: 11px; }
+.gister-gist .gist-file .gist-meta span { font-size:  10px; }
