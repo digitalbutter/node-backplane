@@ -6,11 +6,13 @@ This library implements a [backplane](https://sites.google.com/site/backplanespe
 
 ## Usage
 
-Client:
+This library includes 3 major components. A client for periodically polling an existing backplane server, a backplane server that runs on a plain node installation and a backplane server designed to work with connect.
 
-Server:
+### Client:
 
-Connect Server:
+### Server:
+
+### Connect Server:
 
 ## Support
 
