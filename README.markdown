@@ -1,5 +1,11 @@
 This library implements a [backplane](https://sites.google.com/site/backplanespec/) server and client on [NodeJS](http://nodejs.org/).
 
+## Links
+
+* [Issues](https://github.com/digitalbutter/node-backplane/issues)
+* [API](http://digitalbutter.github.com/node-backplane/api/)
+* [Project Tracker](https://www.pivotaltracker.com/projects/255711)
+
 ## Installation
 
     npm install backplane
@@ -25,12 +31,6 @@ This component implements a response handler for using with the [Connect](https:
 This component allows you to create a backplane server on a vanilla node installation.
 
 <script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplaneServer/node.js"></script>
-
-## Support
-
-* [Issues](https://github.com/digitalbutter/node-backplane/issues)
-* [API](http://digitalbutter.github.com/node-backplane/api/)
-* [Project Tracker](https://www.pivotaltracker.com/projects/255711)
 
 ## License
 
