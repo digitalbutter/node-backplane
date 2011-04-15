@@ -1,8 +1,4 @@
-// To test this example, edit the config.yml file (in features/) and chose "node.js" as the server
-// Then run "cucumber features"
-
-
-// This example uses regular node stuff
+// This example uses regular node
 var http = require('http');
 var sys = require('sys');
 
