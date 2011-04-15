@@ -2,8 +2,8 @@ This library implements a [backplane](https://sites.google.com/site/backplanespe
 
 ## Links
 
-* [Issues](https://github.com/digitalbutter/node-backplane/issues)
 * [API](http://digitalbutter.github.com/node-backplane/api/)
+* [Issues](https://github.com/digitalbutter/node-backplane/issues)
 * [Project Tracker](https://www.pivotaltracker.com/projects/255711)
 
 ## Installation
