@@ -160,7 +160,6 @@
 <span class="kd">var</span> <span class="nx">utils</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./utils.js&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">MemoryMessageStore</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./memoryMessageStore.js&quot;</span><span class="p">).</span><span class="nx">MemoryMessageStore</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;crypto&quot;</span><span class="p">);</span>
 
 
 <span class="kd">var</span> <span class="nx">Backplane</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
@@ -255,7 +254,7 @@
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">postEnd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span><span class="nx">response</span><span class="p">,</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span>
+    <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
     <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="nx">scope</span><span class="p">.</span><span class="nx">messageStore</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">bus</span><span class="p">,</span><span class="nx">channel</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">content</span><span class="p">);</span>
@@ -265,6 +264,9 @@
 <span class="p">};</span>
 
 <span class="nx">Backplane</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">decode64Handler</span><span class="p">)</span> <span class="nx">options</span><span class="p">.</span><span class="nx">decode64Handler</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;base64&#39;</span><span class="p">).</span><span class="nx">decode</span><span class="p">;</span>
+
     <span class="nx">utils</span><span class="p">.</span><span class="nx">mergeOptions</span><span class="p">(</span><span class="k">this</span><span class="p">,[</span><span class="s1">&#39;authHandler&#39;</span><span class="p">,</span><span class="s1">&#39;decode64Handler&#39;</span><span class="p">,</span><span class="s1">&#39;messageStore&#39;</span><span class="p">],</span><span class="nx">options</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">loadSecrets</span><span class="p">();</span>
     <span class="kd">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
