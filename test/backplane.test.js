@@ -21,19 +21,22 @@ describe('backplane', function(){
     beforeEach(function(){
         spyOn(backplane,"loadSecrets").andReturn();
     });
+
     describe("handler", function(){
-        var callback;
+        var callback, base64;
 
         beforeEach(function(){
+            base64 = require('base64');
+
             spyOn(utils, 'mergeOptions');
             callback = backplane.handler({options: 'I am the options file'});
         });
 
-        it("should call the merge function before returning the callback",function(){
+        it("should call the merge function and default base64 handler to base64 library",function(){
             expect(utils.mergeOptions)
                     .toHaveBeenCalledWith(backplane
                     ,['authHandler','decode64Handler','messageStore']
-                    ,{options: 'I am the options file'})
+                    ,{options: 'I am the options file', decode64Handler: base64.decode})
         });
 
         it("should return a callback",function(){
@@ -125,6 +128,18 @@ describe('backplane', function(){
                 it("should call the messageStore function passing its getMessagesCallback",function(){
                     expect(backplane.messageStore.getChannelMessages).toHaveBeenCalledWith('valid_bus','valid_channel',{},'process_return');
                 });
+            });
+        });
+
+        describe("Pass zero arguments to handler",function(){
+            var callback;
+
+            beforeEach(function(){
+                callback = backplane.handler();
+            });
+
+            it("should return a callback",function(){
+                expect(typeof callback).toEqual('function');
             });
         });
     });

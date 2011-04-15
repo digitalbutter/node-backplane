@@ -10,9 +10,17 @@ This library includes 3 major components. A client for periodically polling an e
 
 ### Client:
 
-### Server:
+The client is used to poll an existing backplane server for messages. Once created it will check the backplane server for new messages at a specified interval.
+
+<script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplanePoller/poller.js"></script>
 
 ### Connect Server:
+
+<script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplaneServer/connect.js"></script>
+
+### Plain Node Server:
+
+<script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplaneServer/node.js"></script>
 
 ## Support
 

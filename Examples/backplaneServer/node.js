@@ -4,24 +4,17 @@
 
 // This example uses regular node stuff
 var http = require('http');
-var base64 = require('base64');
 var sys = require('sys');
 
-
-var backplane;
-try {
-    Backplane = require('backplane').Backplane; // If the package is installed on your system
-} catch(err) {
-    Backplane = require('./../../lib/index.js').Backplane; // Otherwise, direct link to the index file.
-}
+var Backplane = require('backplane').Backplane;
 
 var port = 8001;
 
-var backplaneHandler = (new Backplane()).handler({ decode64Handler: base64.decode });
+var backplaneHandler = (new Backplane()).handler();
 
 var handler = function(req,res){
     //Catch exceptions to return appropriate responses
-    try{
+    try {
         backplaneHandler(req,res);
     }
     catch(err){
