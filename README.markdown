@@ -1,4 +1,4 @@
-This library implements a [backplane](https://sites.google.com/site/backplanespec/) server and client.
+This library implements a [backplane](https://sites.google.com/site/backplanespec/) server and client on [NodeJS](http://nodejs.org/).
 
 ## Installation
 
@@ -16,9 +16,13 @@ The client is used to poll an existing backplane server for messages. Once creat
 
 ### Connect Server:
 
+This component implements a response handler for using with the [Connect](https://github.com/senchalabs/connect) middleware framework.
+
 <script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplaneServer/connect.js"></script>
 
 ### Plain Node Server:
+
+This component allows you to create a backplane server on a vanilla node installation.
 
 <script src="http://gist-it.appspot.com/github/digitalbutter/node-backplane/raw/master/Examples/backplaneServer/node.js"></script>
 
