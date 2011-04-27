@@ -4,4 +4,4 @@ backplane:
 valid_info:
   bus: "valid_bus1"
   key: "unguessable_key"
-server: 'connect.js'
+server: 'node.js'

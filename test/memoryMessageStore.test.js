@@ -134,7 +134,7 @@ describe("Store class",function(){
         it("should be properly initialized",function(){
             expect(store.maxsize).toEqual(10);
             expect(store.content).toEqual({});
-            expect(store.count).toBe(0);
+            expect(store.count).toBe(1);
         })
     });
 
@@ -192,10 +192,10 @@ describe("Store class",function(){
             store.pushMessage("valid_bus","valid_channel","This is message")
         });
         it("should have called Channel.pushMessage",function(){
-            expect(channel.prototype.pushMessage).toHaveBeenCalledWith("This is message",0)
+            expect(channel.prototype.pushMessage).toHaveBeenCalledWith("This is message",1)
         });
         it("should have increase the counter",function(){
-            expect(store.count).toEqual(1);
+            expect(store.count).toEqual(2);
         })
     });
 
@@ -228,11 +228,11 @@ describe("Store class",function(){
                 expected_result = [ {
                     message : 'This is message',
                     channel_name : 'valid_channel',
-                    id : 0
+                    id : 1
                 }, {
                     message : 'This is message_#2',
                     channel_name : 'valid_channel_#2',
-                    id : 1
+                    id : 2
                 } ];
                 expect(res).toEqual(expected_result)
             })
@@ -248,16 +248,16 @@ describe("Store class",function(){
                 store.pushMessage("valid_bus","valid_channel","This is message");
                 store.pushMessage("valid_bus","valid_channel_#2","This is message_#2");
                 store.pushMessage("valid_bus","valid_channel","This is message #3");
-                res = store.getBusMessages("valid_bus",{since:0}); // Message 0 already seen
+                res = store.getBusMessages("valid_bus",{since:1}); // Message 1 already seen
             });
             it("should return some result",function(){
                 expected_result = [ {
                     message : 'This is message #3',
-                    channel_name : 'valid_channel', id : 2
+                    channel_name : 'valid_channel', id : 3
                 }, {
                     message : 'This is message_#2',
                     channel_name : 'valid_channel_#2',
-                    id : 1
+                    id : 2
                 } ];
                 expect(res).toEqual(expected_result)
             })
@@ -455,13 +455,11 @@ describe("MemoryMessageStore class",function(){
                 spyOn(MMS.store,"isValidBus").andReturn(false);
                 callback = {callback: function(){} };
                 spyOn(callback,"callback");
-                MMS.getBusMessages("invalid_bus",null,callback.callback)
             });
-            it("should check the bus",function(){
-                expect(MMS.store.isValidBus).toHaveBeenCalled()
-            });
-            it("should call the callback",function(){
-                expect(callback.callback).toHaveBeenCalledWith({ name: "Invalid bus exception", message: "Attempt to read an invalid bus"});
+            it("should throw an exception",function(){
+                expect(function(){
+                    MMS.getBusMessages("invalid_bus",null,callback.callback)
+                }).toThrow({ name: "BusError", message: "Bus does not exist."});
             })
         })
     });
@@ -486,20 +484,38 @@ describe("MemoryMessageStore class",function(){
                 expect(callback.callback).toHaveBeenCalledWith("MESSAGES")
             })
         });
-        describe("on invalid channel",function(){
+        describe("on invalid bus",function(){
             beforeEach(function(){
                 spyOn(MMS.store,"isValidChannel").andReturn(false);
                 callback = {callback: function(){} };
                 spyOn(callback,"callback");
-                MMS.getChannelMessages("invalid_bus","valid_channel",null,callback.callback)
+
+            });
+            it("should throw an exception",function(){
+                expect(function(){
+                    MMS.getChannelMessages("invalid_bus","valid_channel",null,callback.callback)
+                }).toThrow({ name: "BusError", message: "Bus does not exist."});
+            })
+        });
+        describe("on non-existing channel and valid bus",function(){
+            beforeEach(function(){
+                spyOn(MMS.store,"isValidChannel").andReturn(false);
+                spyOn(MMS.store,"isValidBus").andReturn(true);
+                callback = {callback: function(){} };
+                spyOn(callback,"callback");
+                MMS.getChannelMessages("valid_bus","invalid_channel",null,callback.callback)
+            });
+            it("should check the bus",function(){
+                expect(MMS.store.isValidBus).toHaveBeenCalled();
             });
             it("should check the channel",function(){
-                expect(MMS.store.isValidChannel).toHaveBeenCalled()
+                expect(MMS.store.isValidChannel).toHaveBeenCalled();
             });
-            it("should call the callback",function(){
-                expect(callback.callback).toHaveBeenCalledWith([]);
-            })
+            it("should call callback with empty array",function(){
+               expect(callback.callback).toHaveBeenCalledWith([]);
+            });
         })
+
     });
 
     describe("newChannelSize",function(){
@@ -529,7 +545,7 @@ describe("MemoryMessageStore class",function(){
                 message = JSON.stringify({source:"http://yo.com",payload:"THIS IS MADNESS!",type:"you re the type!"})
             });
             it("should poop all over the place",function(){
-                   expect(function(){ MMS.validate(message) }).toThrow({name: "Invalid Message Exception",message:"source must be a valid URL"});
+                   expect(function(){ MMS.validate(message) }).toThrow({name: "BadRequest",message:"Source must be a valid URL"});
             })
         });
         describe("with invalid message",function(){
@@ -538,7 +554,7 @@ describe("MemoryMessageStore class",function(){
                 message = JSON.stringify({sorce:"http://yo.com",payload:"THIS IS MADNESS!",type:"you re the type!"})
             });
             it("should poop all over the place",function(){
-                expect(function(){ MMS.validate(message) }).toThrow({name: "Invalid Message Exception",message:"Specify source, payload and type"});
+                expect(function(){ MMS.validate(message) }).toThrow({name: "BadRequest",message:"Mandatory parameter absent"});
             })
         })
     });

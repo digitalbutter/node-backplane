@@ -2,7 +2,7 @@ class Defaults
   def initialize(config)
     @config = config
     @valid_info = @config['valid_info']
-    @count = 0
+    @count = 1
   end
 
   def get_count()
@@ -16,10 +16,14 @@ class Defaults
       @config['base_url'] + '/' + @config['backplane']['version'] + '/bus/' + @valid_info['bus']
   end
 
+  def get_invalid_bus()
+      @config['base_url'] + '/' + @config['backplane']['version'] + '/bus/' + 'invalid_bus'
+  end
+
   def get_valid_channel(channel)
      get_valid_bus + '/channel/' + channel
   end
-  
+
   def get_valid_token()
     @config['valid_info']['key']
   end

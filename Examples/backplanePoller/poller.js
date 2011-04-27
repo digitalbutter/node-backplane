@@ -1,14 +1,20 @@
 //Start polling backplane
-var backplanePoller = echo.BackplanePoller.spawn(
+var backplanePoller = require("backplane").createBackplanePoller(
     {
-        interval: 500,
-        busName: 'your_bus_name',
-        base64AuthString: 'your_auth_string',
-        host: 'api.js-kit.com'
+        interval: 5000,
+        busName: 'valid_bus1',
+        base64AuthString: 'dmFsaWRfYnVzMTp1bmd1ZXNzYWJsZV9rZXk=',
+        host: '127.0.0.1',
+        port: 8001
     }
     ,{ ssl: false });
 
+
+backplanePoller.addListener('data',function(message){
+    console.log(require('util').inspect(message))
+});
+
 backplanePoller.addListener('session/ready',function(message){
     //Process the message
-    console.log(require('sys').inspect(message));
+    console.log(require('util').inspect(message));
 });

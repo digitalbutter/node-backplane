@@ -39,7 +39,7 @@ When /^I post a valid message to a random channel$/ do
   @expected_response.push(back_message)
 
   begin
-    @response = RestClient.post @current_channel_url, message.to_json, :Authentication => @defaults.get_auth_header(@key), :content_type => :json
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key), :content_type => :json
     @defaults.inc_count
   rescue => e
     @response = e.response
@@ -62,7 +62,7 @@ When /^I post another valid message to the same channel$/ do
   @expected_response.push(back_message)
 
   begin
-    @response = RestClient.post @current_channel_url, message.to_json, :Authentication => @defaults.get_auth_header(@key), :content_type => :json
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key), :content_type => :json
     @defaults.inc_count
   rescue => e
     @response = e
@@ -80,8 +80,9 @@ end
 
 
 When /^I get new messages from that channel$/ do
-  @since = 1
-  @response = RestClient.get @current_channel_url, {:accept => :json, :since => @since}
+  @since = 2
+
+  @response = RestClient.get @current_channel_url+"?since="+@since.to_s, {:accept => :json}
 end
 
 Then /^receive only the last message back$/ do
@@ -92,9 +93,124 @@ When /^I get messages from the bus/ do
   @response = RestClient.get @defaults.get_valid_bus, {:accept => :json}
 end
 
+When /^I get messages from an invalid bus/ do
+  begin
+    @response = RestClient.get @defaults.get_invalid_bus, {:accept => :json}
+  rescue => e
+    @response = e.response
+  end
+end
+
+
 And /^receive both messages back from both channels$/ do
   response = JSON.parse(@response)
   @expected_response.each do |entry|
     response.should be_include(entry)
+  end
+end
+
+
+When /^I post a message without a source to a random channel$/ do
+  @current_channel = rand(9999999999999).to_s
+  @current_channel_url = @defaults.get_valid_channel(@current_channel)
+  message = { "type" => "string" , "payload" => "Yo Mamas Load"}
+  # What the server will reply is a bit different. It adds some unique id and channel name
+  back_message = {"message" => message,  "channel_name"=>@current_channel,"id"=>@defaults.get_count}
+  if(!defined? @expected_response)
+    @expected_response = Array.new
+  end
+
+  @last_message = back_message
+  @expected_response.push(back_message)
+
+  begin
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key),:content_type => :json
+    @defaults.inc_count
+  rescue => e
+    @response = e.response
+  end
+end
+
+When /^I post a message without a type to a random channel$/ do
+  @current_channel = rand(9999999999999).to_s
+  @current_channel_url = @defaults.get_valid_channel(@current_channel)
+  message = { "source" => "http://ep.com", "payload" => "Yo Mamas Load"}
+  # What the server will reply is a bit different. It adds some unique id and channel name
+  back_message = {"message" => message,  "channel_name"=>@current_channel,"id"=>@defaults.get_count}
+  if(!defined? @expected_response)
+    @expected_response = Array.new
+  end
+
+  @last_message = back_message
+  @expected_response.push(back_message)
+
+  begin
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key),:content_type => :json
+    @defaults.inc_count
+  rescue => e
+    @response = e.response
+  end
+end
+
+When /^I post a message with an incorrect source to a random channel$/ do
+  @current_channel = rand(9999999999999).to_s
+  @current_channel_url = @defaults.get_valid_channel(@current_channel)
+  message = { "source" => "http://ep", "type" => "string" , "payload" => "Yo Mamas Load"}
+  # What the server will reply is a bit different. It adds some unique id and channel name
+  back_message = {"message" => message,  "channel_name"=>@current_channel,"id"=>@defaults.get_count}
+  if(!defined? @expected_response)
+    @expected_response = Array.new
+  end
+
+  @last_message = back_message
+  @expected_response.push(back_message)
+
+  begin
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key),:content_type => :json
+    @defaults.inc_count
+  rescue => e
+    @response = e.response
+  end
+end
+
+When /^I post a valid message, without authentication, to a random channel$/ do
+  @current_channel = rand(9999999999999).to_s
+  @current_channel_url = @defaults.get_valid_channel(@current_channel)
+  message = { "source" => "http://ep.com", "type" => "string" , "payload" => "Yo Mamas Load"}
+  # What the server will reply is a bit different. It adds some unique id and channel name
+  back_message = {"message" => message,  "channel_name"=>@current_channel,"id"=>@defaults.get_count}
+  if(!defined? @expected_response)
+    @expected_response = Array.new
+  end
+
+  @last_message = back_message
+  @expected_response.push(back_message)
+
+  begin
+    @response = RestClient.post @current_channel_url, message.to_json, :content_type => :json
+    @defaults.inc_count
+  rescue => e
+    @response = e.response
+  end
+end
+
+When /^I post a valid message, without payload, to a random channel$/ do
+  @current_channel = rand(9999999999999).to_s
+  @current_channel_url = @defaults.get_valid_channel(@current_channel)
+  message = { "source" => "http://ep.com", "type" => "string"}
+  # What the server will reply is a bit different. It adds some unique id and channel name
+  back_message = {"message" => message,  "channel_name"=>@current_channel,"id"=>@defaults.get_count}
+  if(!defined? @expected_response)
+    @expected_response = Array.new
+  end
+
+  @last_message = back_message
+  @expected_response.push(back_message)
+
+  begin
+    @response = RestClient.post @current_channel_url, message.to_json, :Authorization => @defaults.get_auth_header(@key), :content_type => :json
+    @defaults.inc_count
+  rescue => e
+    @response = e.response
   end
 end

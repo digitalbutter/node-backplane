@@ -3,7 +3,7 @@ var utils = require('utils.js');
 
 var MockRequest = function(encoded){
     this.headers = {
-        authentication: encoded
+        authorization: encoded
     };
 };
 
@@ -65,7 +65,7 @@ describe('backplane', function(){
                 });
 
                 it("should call the processGetChannel",function(){
-                    expect(backplane.processGetBus).toHaveBeenCalledWith(res);
+                    expect(backplane.processGetBus).toHaveBeenCalledWith(res,{});
                 });
 
                 it("should call the messageStore function passing its getMessagesCallback",function(){
@@ -122,7 +122,7 @@ describe('backplane', function(){
                 });
 
                 it("should call the processGetChannel",function(){
-                    expect(backplane.processGetChannel).toHaveBeenCalledWith(res);
+                    expect(backplane.processGetChannel).toHaveBeenCalledWith(res,{});
                 });
 
                 it("should call the messageStore function passing its getMessagesCallback",function(){
@@ -243,8 +243,8 @@ describe('backplane', function(){
                 result = err;
             }
 
-            expect(result.name).toEqual("AuthenticationException");
-            expect(result.message).toEqual("The backplane library only supports basic Authentication.");
+            expect(result.name).toEqual("AuthenticationError");
+            expect(result.message).toEqual("This server only supports Basic authentication.");
         });
     });
 
@@ -325,7 +325,7 @@ describe('backplane', function(){
 
         beforeEach(function(){
             res = new MockResponse();
-            callback = backplane.processGetChannel(res);
+            callback = backplane.processGetChannel(res,{});
         });
 
         it("should return a callback", function(){
@@ -357,7 +357,7 @@ describe('backplane', function(){
 
         beforeEach(function(){
             res = new MockResponse();
-            callback = backplane.processGetBus(res);
+            callback = backplane.processGetBus(res,{});
         });
 
         it("should return a callback", function(){

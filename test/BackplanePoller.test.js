@@ -17,7 +17,7 @@ describe("BackplanePoller", function(){
             spyOn(global,'setInterval');
             bindSpy = jasmine.createSpy().andReturn("bound function");
             spyOn(utils,'TBind').andReturn(Trait({ bind:bindSpy }));
-            backplanePoller = BackplanePoller({interval: 100, busName: 'bus_name', base64AuthString: 'base64AuthStringYo', host: 'host url'},{ ssl: false});
+            backplanePoller = BackplanePoller({interval: 100, busName: 'bus_name', base64AuthString: 'base64AuthStringYo', host: 'host url',port:80},{ ssl: false});
         });
 
         it("should be an instance of EventEmitter", function(){
@@ -181,7 +181,7 @@ describe("BackplanePoller", function(){
 
         beforeEach(function(){
             spyOn(http,'createClient').andReturn('client return');
-            backplanePoller = BackplanePoller({ host: 'bus url', ssl: true});
+            backplanePoller = BackplanePoller({ host: 'bus url', port:443, ssl: true});
         });
 
         it("should create an http client",function(){
