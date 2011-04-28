@@ -14,12 +14,13 @@ var MockResponse = function(){
 
 MockResponse.prototype.writeHead = function(){};
 MockResponse.prototype.end = function(){};
-
+var Backplane = require('backplane.js').Backplane;
+var backplane;
 
 describe('backplane', function(){
-    var backplane = new (require('backplane.js').Backplane)();
+
     beforeEach(function(){
-        spyOn(backplane,"loadSecrets").andReturn();
+        backplane = Backplane.spawn({parameters:{secrets:{}}});
     });
 
     describe("handler", function(){

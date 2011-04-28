@@ -1,12 +1,31 @@
 // This example uses regular node
 var http = require('http');
 var sys = require('sys');
-
+var fs = require("fs");
 var Backplane = require('backplane').Backplane;
 
 var port = 8001;
 
-var backplaneHandler = (new Backplane()).handler();
+
+var secretFile = "./secrets.json"; // A list of Buses and secret key for authentication
+
+var loadSecrets = function(secretFile){
+    /**
+     * Loads secret for connecting to a bus. As a matter of fact, also pop the buses
+     */
+    var secrets = {};
+    var data= fs.readFileSync(secretFile,'utf8');
+    try { secrets = JSON.parse(data).secrets} catch(err) { console.log(err) }
+    return secrets
+};
+
+
+var parameters = {
+    secrets : loadSecrets(secretFile)
+};
+
+
+var backplaneHandler = Backplane.spawn({parameters:parameters}).handler();
 
 var handler = function(req,res){
     //Catch exceptions to return appropriate responses
