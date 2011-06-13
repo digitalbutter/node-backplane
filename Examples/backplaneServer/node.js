@@ -2,7 +2,14 @@
 var http = require('http');
 var sys = require('sys');
 var fs = require("fs");
-var Backplane = require('backplane').Backplane;
+
+var Backplane;
+try {
+    Backplane = require('backplane').Backplane;
+} catch(e){ // Case module is not installed, for tests.
+    Backplane = require('../../lib/index.js').Backplane;
+}
+
 
 var port = 8001;
 
