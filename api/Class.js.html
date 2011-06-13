@@ -1,0 +1,279 @@
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+  <title>
+    API: utils
+    
+    
+      &rarr; Class.js (file)
+    
+  </title>
+
+  <link rel="stylesheet" type="text/css" href="css/960fluid.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.4.custom.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/navigation.css">
+  <link rel="stylesheet" type="text/css" href="css/content.css">
+  <link rel="stylesheet" type="text/css" href="css/codeview.css">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono">
+  
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+  <div id="container" class="container_16">
+    <a name="top"></a>
+
+    <!-- HEADER -->
+    <header>
+      <div id="hd" class="grid_10">
+        <h1>
+          <a href="http://digitalbutter.github.com/node-backplane/" title="node-backplane">node-backplane</a> v0.0.0
+        </h1>
+      </div> <!--! end of #hd -->
+    </header>
+
+    <div id="filters" class="grid_6">
+      <form action="#" method="get" id="show-toggles">
+        <fieldset>
+          <legend>Display Filters</legend>
+          <span class="classopts">
+            <input type="checkbox" name="show_private" id="show_private">
+            <label for="show_private">Show private</label>
+          </span>
+          <span class="classopts">
+            <input type="checkbox" name="show_protected" id="show_protected">
+            <label for="show_protected">Show protected</label>
+          </span>
+          <span class="classopts">
+            <input type="checkbox" name="show_deprecated" id="show_deprecated">
+            <label for="show_deprecated">Show deprecated</label>
+          </span>
+        </fieldset>
+      </form>
+
+    </div> <!--! end of #hd -->
+
+
+    <!-- SUB-HEADER w/ BREADCRUMBS -->
+
+    <div id="sub-hd" class="grid_16">
+      <div id="breadcrumbs">
+        <form id="search-form" method="get" action="#">
+          <label for="search">Search:</label>
+          <input type="text" id="search" title="Find documentation">
+        </form>
+
+        <a href="./index.html" title="node-backplane">node-backplane</a>
+          &rarr; module <a href="./module_utils.html" title="utils">utils</a>
+          
+          
+            &rarr; file Class.js
+          
+      </div>
+    </div> <!--! end of #sub-hd -->
+    
+    <div class="clear"></div>
+    
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav>
+      <div id="navigation" class="grid_4">
+        <div>
+
+            <div id="moduleList" class="module">
+              <h4>Modules</h4>
+              <ul>
+                  <li  class="selected" >
+                    <a href="module_utils.html">utils</a>
+                  </li>
+              </ul>
+            </div>
+
+            <div id="classList" class="module">
+              <h4>Classes</h4>
+              <ul>
+                  <li >
+                    <a href="Backplane.html">Backplane</a>
+                  </li>
+                  <li >
+                    <a href="memoryMessageStore.html">memoryMessageStore</a>
+                  </li>
+                  <li >
+                    <a href="TBind.html">TBind</a>
+                  </li>
+              </ul>
+            </div>
+
+            <div id="fileList" class="module">
+              <h4>Files</h4>
+              <ul>
+                  <li >
+                    <a href="backplane.js.html">backplane.js</a>
+                  </li>
+                  <li >
+                    <a href="BackplanePoller.js.html">BackplanePoller.js</a>
+                  </li>
+                  <li  class="selected" >
+                    <a href="Class.js.html">Class.js</a>
+                  </li>
+                  <li >
+                    <a href="index.js.html">index.js</a>
+                  </li>
+                  <li >
+                    <a href="memoryMessageStore.js.html">memoryMessageStore.js</a>
+                  </li>
+                  <li >
+                    <a href="utils.js.html">utils.js</a>
+                  </li>
+              </ul>
+            </div>
+
+
+
+
+
+        </div>
+      </div>  <!-- end of #navigation -->
+    </nav>
+
+
+    <div id="content" class="grid_12">
+      
+
+
+        <!--! source code view -->
+        <div id="srcout">
+          <h2>
+            file <strong>Class.js</strong>
+          </h2>
+
+          <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Class</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){};</span>
+
+<span class="kd">var</span> <span class="nx">initializing</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">fnTest</span> <span class="o">=</span> <span class="sr">/xyz/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">xyz</span><span class="p">;})</span> <span class="o">?</span> <span class="sr">/\b_super\b/</span> <span class="o">:</span> <span class="sr">/.*/</span><span class="p">;</span>
+
+<span class="c1">// Create a new Class that inherits from this class</span>
+<span class="nx">Class</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">_super</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+
+    <span class="c1">// Instantiate a base class (but only create the instance,</span>
+    <span class="c1">// don&#39;t run the init constructor)</span>
+    <span class="nx">initializing</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">proto</span> <span class="o">=</span> <span class="k">new</span> <span class="k">this</span><span class="p">();</span>
+    <span class="nx">initializing</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="c1">// Copy the properties over onto the new prototype</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">name</span> <span class="k">in</span> <span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">props</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">){</span>
+            <span class="c1">// Check if we&#39;re overwriting an existing function</span>
+            <span class="nx">proto</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">props</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span> <span class="o">&amp;&amp;</span>
+                    <span class="k">typeof</span> <span class="nx">_super</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">fnTest</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">props</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="o">?</span>
+                    <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">fn</span><span class="p">){</span>
+                        <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                            <span class="kd">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">;</span>
+
+                            <span class="c1">// Add a new ._super() method that is the same method</span>
+                            <span class="c1">// but on the super-class</span>
+                            <span class="k">this</span><span class="p">.</span><span class="nx">_super</span> <span class="o">=</span> <span class="nx">_super</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+
+                            <span class="c1">// The method only need to be bound temporarily, so we</span>
+                            <span class="c1">// remove it when we&#39;re done executing</span>
+                            <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+                            <span class="k">this</span><span class="p">.</span><span class="nx">_super</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+                            <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+                        <span class="p">};</span>
+                    <span class="p">})(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">props</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="o">:</span>
+                    <span class="nx">props</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// The dummy class constructor</span>
+    <span class="kd">function</span> <span class="nx">Class</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// All construction is actually done in the init method via the spawn function</span>
+        <span class="c1">// Trying to instantiate this Class with the new keyword will throw an error</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">initializing</span><span class="p">)</span> <span class="k">throw</span> <span class="s2">&quot;Don&#39;t use the new keyword to create this object. Instead use the &#39;spawn&#39; function.&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Populate our constructed prototype object</span>
+    <span class="nx">Class</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">proto</span><span class="p">;</span>
+
+    <span class="c1">// Enforce the constructor to be what we expect</span>
+    <span class="nx">Class</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">=</span> <span class="nx">Class</span><span class="p">;</span>
+
+    <span class="nx">Class</span><span class="p">.</span><span class="nx">spawn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">propValues</span><span class="p">,</span> <span class="nx">skipInit</span><span class="p">){</span>
+        <span class="c1">// Martial values onto property definitions</span>
+        <span class="kd">var</span> <span class="nx">finalProps</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">props</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">!==</span> <span class="s2">&quot;function&quot;</span><span class="p">){</span>
+                <span class="nx">finalProps</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+                <span class="nx">finalProps</span><span class="p">[</span><span class="nx">key</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">propValues</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Create, initialize and return the new object</span>
+        <span class="kd">var</span> <span class="nx">newObject</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Class</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span><span class="nx">finalProps</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">newObject</span><span class="p">.</span><span class="nx">init</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">skipInit</span><span class="p">)</span><span class="nx">newObject</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">newObject</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="c1">// And make this class extensible</span>
+    <span class="nx">Class</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+        <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">childProps</span><span class="p">){</span>
+            <span class="c1">//If the parent has properties not defined by the child, copy them on</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">props</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">childProps</span><span class="p">[</span><span class="nx">key</span><span class="p">])</span> <span class="nx">childProps</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">props</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="nx">childProps</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">})(</span><span class="nx">arguments</span><span class="p">.</span><span class="nx">callee</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">Class</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">exports</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// CommonJS module support</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">Class</span> <span class="o">=</span> <span class="nx">Class</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+        </div>
+
+    </div>
+
+
+    <div class="clear"></div>
+
+    
+    <footer>
+      <div id="footer" class="grid_16">
+        <p>
+          Copyright &copy; 2011 Digital Butter Limited. All rights reserved.
+          &middot;
+          Docs generated using <a href="http://developer.yahoo.com/yui/yuidoc/">YUIDoc</a> sporting the <a href="http://github.com/carlo/yuidoc-theme-dana">Dana theme</a>.
+        </p>
+      </div> <!--! end of #footer -->
+    </footer>
+
+
+    <div class="clear"></div>
+
+  </div>
+
+  <!-- Javascript at the bottom for fast page loading -->
+  <script src="js/jquery-1.4.2.min.js" type="text/javascript"></script>
+  <script src="js/jquery-ui-1.8.4.custom.min.js" type="text/javascript"></script>
+  <script src="js/jquery.cookie.min.js" type="text/javascript"></script>
+  <script src="js/main.js" type="text/javascript"></script>
+  
+</body>
+</html>

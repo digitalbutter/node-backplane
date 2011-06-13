@@ -126,6 +126,9 @@
                     <a href="BackplanePoller.js.html">BackplanePoller.js</a>
                   </li>
                   <li >
+                    <a href="Class.js.html">Class.js</a>
+                  </li>
+                  <li >
                     <a href="index.js.html">index.js</a>
                   </li>
                   <li >
@@ -204,7 +207,7 @@
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-                    <span class="p">));</span>
+    <span class="p">));</span>
 <span class="p">}</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">){</span>
@@ -220,8 +223,8 @@
             <span class="p">);</span>
 
     <span class="c1">//Setup the client</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">ssl</span><span class="p">)</span> <span class="nx">newPoller</span><span class="p">.</span><span class="nx">client</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createClient</span><span class="p">(</span><span class="mi">443</span><span class="p">,</span><span class="nx">config</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
-    <span class="k">else</span> <span class="nx">newPoller</span><span class="p">.</span><span class="nx">client</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createClient</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span><span class="nx">config</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span><span class="kc">false</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">ssl</span><span class="p">)</span> <span class="nx">newPoller</span><span class="p">.</span><span class="nx">client</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createClient</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span><span class="nx">config</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+    <span class="k">else</span> <span class="nx">newPoller</span><span class="p">.</span><span class="nx">client</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createClient</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span><span class="nx">config</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span><span class="kc">false</span><span class="p">);</span>
 
     <span class="c1">//Start polling and return the object</span>
     <span class="nx">setInterval</span><span class="p">(</span><span class="nx">newPoller</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">newPoller</span><span class="p">.</span><span class="nx">getBusMessages</span><span class="p">),</span><span class="nx">config</span><span class="p">.</span><span class="nx">interval</span><span class="p">);</span>
