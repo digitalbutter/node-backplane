@@ -1,6 +1,6 @@
 // This example uses regular node
 var http = require('http');
-var sys = require('sys');
+var util = require('util');
 var fs = require("fs");
 
 var Backplane;
