@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/digitalbutter/node-backplane.png)](http://travis-ci.org/digitalbutter/node-backplane)
 This library implements a [backplane](https://sites.google.com/site/backplanespec/) server and client on [NodeJS](http://nodejs.org/).
 
 ## Links
